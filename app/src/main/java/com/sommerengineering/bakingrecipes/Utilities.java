@@ -18,7 +18,8 @@ public final class Utilities {
     private static final String LOG_TAG = Utilities.class.getSimpleName();
 
     // URL constants
-    private static final String UDACITY_BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+    private static final String UDACITY_BASE_URL =
+            "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
     // create a URL for the given Udacity JSON server
     static URL getUdacityUrl() {
@@ -68,5 +69,7 @@ public final class Utilities {
 
         return responseJson;
     }
+
+
 
 }
