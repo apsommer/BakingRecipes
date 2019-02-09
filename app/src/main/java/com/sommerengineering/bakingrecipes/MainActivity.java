@@ -1,34 +1,38 @@
 package com.sommerengineering.bakingrecipes;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.net.URL;
-import java.util.concurrent.Executor;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     // simple tag for log messages
-    private static final String LOG_TAG = Utilities.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final URL url = Utilities.getUdacityUrl();
-        Log.e(LOG_TAG, "~~ " + url.toString());
-
         new Thread(new Runnable() {
+
             public void run() {
-                String responseJson = Utilities.getResponseFromHttp(url);
+
+                URL url = Utilities.getUdacityUrl();
+                Log.e(LOG_TAG, "~~ " + url.toString());
+
+                String responseJson = Utilities.getJsonResponseFromHttp(url);
                 Log.e(LOG_TAG, "~~ " + responseJson);
+
+                ArrayList<Dessert> desserts = Utilities.extractDessertsFromJson(responseJson);
+                Log.e(LOG_TAG, "~~ " + desserts.get(0));
+
             }
         }).start();
 

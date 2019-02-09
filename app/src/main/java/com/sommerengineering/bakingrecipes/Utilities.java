@@ -3,11 +3,17 @@ package com.sommerengineering.bakingrecipes;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 // final access modifier because no objects of this class will ever be created
@@ -36,7 +42,7 @@ public final class Utilities {
     }
 
     // obtain JSON response string from API endpoint
-    public static String getResponseFromHttp(URL url){
+    public static String getJsonResponseFromHttp(URL url){
 
         // initialize response to null
         String responseJson = null;
@@ -70,6 +76,87 @@ public final class Utilities {
         return responseJson;
     }
 
+    // convert JSON payload to an list of desserts
+    public static ArrayList<Dessert> extractDessertsFromJson(String responseJson) {
+
+        // initialize an empty ArrayList
+        ArrayList<Dessert> desserts = new ArrayList<>();
+
+        // parse JSON string can throw JSONException
+        try {
+
+            // go down one level of the JSON payload
+            JSONArray allDeserts = new JSONArray(responseJson);
+
+            // loop through the desserts
+            for (int i = 0; i < allDeserts.length(); i++) {
+
+                // current dessert
+                JSONObject dessert = allDeserts.getJSONObject(i);
+
+                // extract the dessert's basic attributes
+                int id = dessert.getInt("id");
+                String name = dessert.getString("name");
+                int servings = dessert.getInt("servings");
+                String imagePath = dessert.getString("image");
+
+                // initialize an empty ArrayList
+                ArrayList<Ingredient> ingredients = new ArrayList<>();
+
+                // go down one level of the JSON payload
+                JSONArray allIngredients = dessert.getJSONArray("ingredients");
+
+                // loop through the ingredients
+                for (int j = 0; j < allIngredients.length(); j++) {
+
+                    // current ingredient
+                    JSONObject ingredient = allIngredients.getJSONObject(j);
+
+                    // extract the ingredient's basic attributes
+                    int ingredientId = j;
+                    int quantity = ingredient.getInt("quantity");
+                    String measure = ingredient.getString("measure");
+                    String ingredientName = ingredient.getString("ingredient");
+
+                    // create new Ingredient object and add it to the ArrayList
+                    ingredients.add(new Ingredient(ingredientId, ingredientName, quantity, measure));
+
+                }
+
+                // initialize an empty ArrayList
+                ArrayList<Step> steps = new ArrayList<>();
+
+                // go down one level of the JSON payload
+                JSONArray allSteps = dessert.getJSONArray("steps");
+
+                // loop through the steps
+                for (int j = 0; j < allSteps.length(); j++) {
+
+                    // current step
+                    JSONObject step = allSteps.getJSONObject(j);
+
+                    // extract the steps's basic attributes
+                    int stepId = step.getInt("id");
+                    String shortDescription = step.getString("shortDescription");
+                    String description = step.getString("description");
+                    String videoPath = step.getString("videoURL");
+                    String thumbnailPath = step.getString("thumbnailURL");
+
+                    // create new Ingredient object and add it to the ArrayList
+                    steps.add(new Step(stepId, shortDescription, description, videoPath, thumbnailPath));
+
+                }
+
+                desserts.add(new Dessert(id, name, servings, imagePath, ingredients, steps));
+
+            }
 
 
+        // log exception stack trace
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing the movies JSON results: ", e);
+        }
+
+        return desserts;
+    }
 }
