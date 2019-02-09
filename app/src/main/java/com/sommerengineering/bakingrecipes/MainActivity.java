@@ -1,13 +1,16 @@
 package com.sommerengineering.bakingrecipes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.net.URL;
+import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,8 +22,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        URL url = Utilities.getUdacityUrl();
+        final URL url = Utilities.getUdacityUrl();
         Log.e(LOG_TAG, "~~ " + url.toString());
+
+        new Thread(new Runnable() {
+            public void run() {
+                String responseJson = Utilities.getResponseFromHttp(url);
+                Log.e(LOG_TAG, "~~ " + responseJson);
+            }
+        }).start();
+
     }
 
     // check status of internet connectivity
