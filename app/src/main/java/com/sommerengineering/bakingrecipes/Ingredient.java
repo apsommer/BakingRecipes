@@ -25,7 +25,7 @@ public class Ingredient implements Serializable {
     int getId() {
         return mId;
     }
-    String getTitle() {
+    String getName() {
         return mName;
     }
     int getQuantity() {
