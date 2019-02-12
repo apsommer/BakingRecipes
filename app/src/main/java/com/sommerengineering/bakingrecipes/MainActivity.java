@@ -4,11 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,10 +26,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class MainActivity extends AppCompatActivity implements DessertAdapter.DessertAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements
+        DessertAdapter.DessertAdapterOnClickHandler, LoaderManager.LoaderCallbacks<ArrayList<Dessert>> {
 
-    // simple tag for log messages
+    // constants
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int DESSERTS_LOADER_ID = 0;
 
     // member variables
     private Context mContext;
@@ -44,9 +51,6 @@ public class MainActivity extends AppCompatActivity implements DessertAdapter.De
         mRecycler = findViewById(R.id.rv_recycler);
         mProgressBar = findViewById(R.id.pb_progress);
 
-        // empty state of recycler
-        TextView emptyStateTv = findViewById(R.id.tv_empty_state);
-
         // set the number of columns in the recycler grid using a layout manager
         int numOfColumns = Utilities.calculateNumberOfColumns(mContext);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, numOfColumns);
@@ -63,23 +67,17 @@ public class MainActivity extends AppCompatActivity implements DessertAdapter.De
             mRecycler.setAdapter(mAdapter);
         }
 
-        // TODO background thread for testing
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<ArrayList<Dessert>> result = executor.submit(new Callable<ArrayList<Dessert>>() {
-            @Override
-            public ArrayList<Dessert> call() throws Exception {
+        // if the internet connect is active then start a loader
+        if (isConnected()) {
+            LoaderManager loaderManager = getSupportLoaderManager();
+            loaderManager.initLoader(DESSERTS_LOADER_ID, null, this);
+        }
 
-                URL url = Utilities.getUdacityUrl();
-                String responseJson = Utilities.getJsonResponseFromHttp(url);
-                return Utilities.extractDessertsFromJson(responseJson);
-            }
-        });
-
-        try {
-            ArrayList<Dessert> desserts = result.get();
-            mAdapter.addAll(desserts);
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "~~ " + e.toString());
+        // else show the empty state of the recycler
+        else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            TextView emptyStateTv = findViewById(R.id.tv_empty_state);
+            emptyStateTv.setVisibility(View.VISIBLE);
         }
 
     }
@@ -91,6 +89,42 @@ public class MainActivity extends AppCompatActivity implements DessertAdapter.De
         Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
         intentToStartDetailActivity.putExtra("selectedDessert", dessert);
         startActivity(intentToStartDetailActivity);
+    }
+
+    @NonNull
+    @Override
+    public Loader<ArrayList<Dessert>> onCreateLoader(int i, @Nullable Bundle bundle) {
+
+        // pass the Udacity server URL to the Loader class
+        URL url = Utilities.getUdacityUrl();
+        return new DessertLoader(mContext, url);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<ArrayList<Dessert>> loader, ArrayList<Dessert> desserts) {
+
+        // clear the adapter of any previous results
+        mAdapter.clear();
+
+        // check that the list of desserts was loaded correctly
+        if (desserts != null && !desserts.isEmpty()) {
+
+            // refresh adapter with results from HTTP request --> JSON payload --> ArrayList<Dessert>
+            mAdapter.addAll(desserts);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        // hide the progress bar
+        mProgressBar.setVisibility(View.INVISIBLE);
+
+    }
+
+    // previously created loader is no longer valid and its data should be removed from the UI
+    @Override
+    public void onLoaderReset(@NonNull Loader<ArrayList<Dessert>> loader) {
+
+        // setting the recycler adapter as null clears the UI
+        mRecycler.setAdapter(null);
     }
 
     // check status of internet connectivity
