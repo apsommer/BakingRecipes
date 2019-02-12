@@ -15,6 +15,7 @@
         android:fontFamily="@font/adamina"
         android:textSize="32sp"
         android:background="@null"
+        android:textColor="@android:color/black"
         tools:text="Crumble Cake"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp" />
@@ -34,6 +35,7 @@
             android:gravity="center"
             android:fontFamily="@font/adamina"
             android:textSize="12sp"
+            android:textColor="@android:color/black"
             android:background="@null"
             tools:text="8" />
 
@@ -43,6 +45,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/adamina"
             android:textSize="12sp"
+            android:textColor="@android:color/black"
             android:background="@null"
             android:text=" servings" />
 

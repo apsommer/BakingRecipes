@@ -46,10 +46,10 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
         DessertViewHolder(View itemView) {
 
             super(itemView);
+            itemView.setOnClickListener(this);
 
             // initialize the Butterknife view binding library
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
         }
 
         // on item click pass the Dessert object to MainActivity through the handler interface
