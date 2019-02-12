@@ -30,4 +30,8 @@ dependencies {
 
     // support library for RecyclerView
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    // view binding library that simplifies repeated calls to findViewById()
+    implementation 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

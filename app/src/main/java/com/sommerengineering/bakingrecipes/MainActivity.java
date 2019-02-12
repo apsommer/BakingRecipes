@@ -12,22 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements
-        DessertAdapter.DessertAdapterOnClickHandler, LoaderManager.LoaderCallbacks<ArrayList<Dessert>> {
+        DessertsAdapter.DessertAdapterOnClickHandler, LoaderManager.LoaderCallbacks<ArrayList<Dessert>> {
 
     // constants
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -35,9 +31,12 @@ public class MainActivity extends AppCompatActivity implements
 
     // member variables
     private Context mContext;
-    private RecyclerView mRecycler;
-    private DessertAdapter mAdapter;
-    private ProgressBar mProgressBar;
+    private DessertsAdapter mAdapter;
+
+    // Butterknife view binding
+    @BindView(R.id.rv_recycler) RecyclerView mRecycler;
+    @BindView(R.id.pb_progress) ProgressBar mProgressBar;
+    @BindView(R.id.tv_empty_state) TextView mEmptyStateTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +45,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // initialize member variables
+        // initialize the Butterknife view binding library
+        ButterKnife.bind(this);
+
+        // get top level application context
         mContext = getApplicationContext();
-        mRecycler = findViewById(R.id.rv_recycler);
-        mProgressBar = findViewById(R.id.pb_progress);
 
         // set the number of columns in the recycler grid using a layout manager
         int numOfColumns = Utilities.calculateNumberOfColumns(mContext);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements
         // initialize the adapter with a blank list and bind it to the recycler
         if (mAdapter == null) {
             ArrayList<Dessert> desserts = new ArrayList<>();
-            mAdapter = new DessertAdapter(mContext, desserts, this);
+            mAdapter = new DessertsAdapter(mContext, desserts, this);
             mRecycler.setAdapter(mAdapter);
         }
 
@@ -76,10 +76,8 @@ public class MainActivity extends AppCompatActivity implements
         // else show the empty state of the recycler
         else {
             mProgressBar.setVisibility(View.INVISIBLE);
-            TextView emptyStateTv = findViewById(R.id.tv_empty_state);
-            emptyStateTv.setVisibility(View.VISIBLE);
+            mEmptyStateTv.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -97,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // pass the Udacity server URL to the Loader class
         URL url = Utilities.getUdacityUrl();
-        return new DessertLoader(mContext, url);
+        return new DessertsLoader(mContext, url);
     }
 
     @Override

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 // populates the recycler grid in MainActivity
-public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertViewHolder> {
+public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.DessertViewHolder> {
 
     // click handler for the recycler items
     public interface DessertAdapterOnClickHandler {
@@ -24,7 +24,7 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertV
     private final DessertAdapterOnClickHandler mClickHandler;
 
     // constructor
-    public DessertAdapter(Context context, ArrayList<Dessert> desserts, DessertAdapterOnClickHandler clickHandler) {
+    public DessertsAdapter(Context context, ArrayList<Dessert> desserts, DessertAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
         mContext = context;

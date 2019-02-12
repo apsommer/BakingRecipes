@@ -5,6 +5,12 @@
     android:id="@+id/tv_dessert_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/grid_spacing" />
+    android:layout_margin="@dimen/grid_spacing"
+    android:gravity="center"
+    android:fontFamily="@font/adamina"
+    android:textSize="32sp"
+    android:background="@android:color/white"
+
+    />
 
 

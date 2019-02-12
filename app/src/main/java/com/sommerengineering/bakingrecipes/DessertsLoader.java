@@ -7,13 +7,13 @@ import android.support.v4.content.AsyncTaskLoader;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DessertLoader extends AsyncTaskLoader<ArrayList<Dessert>> {
+public class DessertsLoader extends AsyncTaskLoader<ArrayList<Dessert>> {
 
     // initialize a member variable for the Udacity server URL
     private final URL mUrl;
 
     // constructor is passed the URL and sets it to the member variable
-    public DessertLoader(Context context, URL url) {
+    public DessertsLoader(Context context, URL url) {
         super(context);
         mUrl = url;
     }
