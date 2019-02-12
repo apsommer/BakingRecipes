@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 // populates the recycler grid in MainActivity
 public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.DessertViewHolder> {
 
@@ -32,17 +35,20 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
         mClickHandler = clickHandler;
     }
 
-    // viewholder subclass allows for caching of views which decreases device memory usage
+    // ViewHolder subclass allows for caching of views which decreases device memory usage
     class DessertViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // a single textview consumes the entire recycler item and displays the dessert name
-        private final TextView mDessertNameTv;
+        // bind views using Butterknife library
+        @BindView(R.id.tv_name) TextView mNameTv;
+        @BindView(R.id.tv_servings) TextView mServingsTv;
 
-        // constructor puts a click listener on this textview
+        // constructor puts a click listener on the item view
         DessertViewHolder(View itemView) {
 
             super(itemView);
-            mDessertNameTv = itemView.findViewById(R.id.tv_dessert_name);
+
+            // initialize the Butterknife view binding library
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
@@ -57,8 +63,9 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
         }
 
         // set the text in the item textview
-        void bind(String recipeName) {
-            mDessertNameTv.setText(recipeName);
+        void bind(String name, int servings) {
+            mNameTv.setText(name);
+            mServingsTv.setText(String.valueOf(servings));
         }
     }
 
@@ -84,9 +91,12 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
             // get current Dessert
             Dessert dessert = mDesserts.get(position);
 
-            // call into holder class to bind data to textview for this item
-            String recipeName = dessert.getName();
-            viewHolder.bind(recipeName);
+            // get basic attributes of this dessert
+            String name = dessert.getName();
+            int servings = dessert.getServings();
+
+            // call into holder class to bind data for this item
+            viewHolder.bind(name, servings);
         }
     }
 

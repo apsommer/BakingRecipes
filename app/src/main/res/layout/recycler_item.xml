@@ -1,16 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tv_dessert_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/grid_spacing"
-    android:gravity="center"
-    android:fontFamily="@font/adamina"
-    android:textSize="32sp"
-    android:background="@android:color/white"
+    >
 
-    />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/adamina"
+        android:textSize="32sp"
+        android:background="@null"
+        tools:text="Crumble Cake"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_servings_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/adamina"
+        android:textSize="12sp"
+        android:background="@null"
+        android:text="Servings: "
+        android:layout_below="@id/tv_name"
+        android:layout_alignLeft="@id/tv_name"
+        />
+
+    <TextView
+        android:id="@+id/tv_servings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/adamina"
+        android:textSize="12sp"
+        android:background="@null"
+        tools:text="8"
+        android:layout_toRightOf="@id/tv_servings_label"
+        android:layout_alignBaseline="@id/tv_servings_label"
+        />
+
+
+
+</RelativeLayout>
 
 
