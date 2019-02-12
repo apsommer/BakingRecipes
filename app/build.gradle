@@ -34,4 +34,7 @@ dependencies {
     // view binding library that simplifies repeated calls to findViewById()
     implementation 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    // String processing library from Apache
+    implementation 'org.apache.commons:commons-lang3:3.6'
 }

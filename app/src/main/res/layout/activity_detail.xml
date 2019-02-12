@@ -10,7 +10,7 @@
         android:id="@+id/rl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
+        android:paddingBottom="@dimen/detail_spacing"
         android:background="@android:color/white" >
 
         <TextView
@@ -27,6 +27,7 @@
             android:layout_marginTop="8dp" />
 
         <LinearLayout
+            android:id="@+id/ll_servings_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -41,7 +42,7 @@
                 android:gravity="center"
                 android:fontFamily="@font/adamina"
                 android:textSize="12sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/gray"
                 android:background="@null"
                 tools:text="8" />
 
@@ -50,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/adamina"
-                android:textColor="@android:color/black"
+                android:textColor="@color/gray"
                 android:textSize="12sp"
                 android:background="@null"
                 android:text=" servings" />

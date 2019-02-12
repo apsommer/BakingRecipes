@@ -3,6 +3,7 @@ package com.sommerengineering.bakingrecipes;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -176,6 +177,12 @@ public final class Utilities {
         // number of columns is how many R.dimen.button can fit in this device width
         return (int) (dpWidth / itemWidth);
 
+    }
+
+    // convert dp to raw pixels
+    public static int dpToPx(Context context, float dp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
 }
