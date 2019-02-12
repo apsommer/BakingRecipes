@@ -1,6 +1,7 @@
 package com.sommerengineering.bakingrecipes;
 
-import android.net.Uri;
+import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -9,7 +10,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -159,4 +159,23 @@ public final class Utilities {
 
         return desserts;
     }
+
+    // calculate number of columns for the recycler using the device pixel density
+    // the column width will always be approximately the same physical size regardless of device or orientation
+    public static int calculateNumberOfColumns(Context context) {
+
+        // get the current device screen dimensions
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        // get current device width in dp
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+
+        // conversion is 160 dp = 1 inch
+        float itemWidth = context.getResources().getInteger(R.integer.recycler_item_width);
+
+        // number of columns is how many R.dimen.button can fit in this device width
+        return (int) (dpWidth / itemWidth);
+
+    }
+
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- recycler item width in raw pixels -->
+    <integer name="recycler_item_width">360</integer>
+
+</resources>
