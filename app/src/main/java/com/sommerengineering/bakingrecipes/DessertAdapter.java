@@ -10,7 +10,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+// populates the recycler grid in MainActivity
 public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertViewHolder> {
+
+    // click handler for the recycler items
+    public interface DessertAdapterOnClickHandler {
+        void onRecyclerItemClick(Dessert dessert);
+    }
 
     // member variables
     private ArrayList<Dessert> mDesserts;
@@ -26,18 +32,13 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertV
         mClickHandler = clickHandler;
     }
 
-    // click handler for recycler items
-    public interface DessertAdapterOnClickHandler {
-        void onRecyclerItemClick(Dessert dessert);
-    }
-
-    // ViewHolder subclass allows for view caching which decreases usage of device memory
+    // viewholder subclass allows for caching of views which decreases device memory usage
     class DessertViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // TextView displays the dessert name
+        // a single textview consumes the entire recycler item and displays the dessert name
         private final TextView mDessertNameTv;
 
-        // constructor puts a click listener on the view
+        // constructor puts a click listener on this textview
         DessertViewHolder(View itemView) {
 
             super(itemView);
@@ -45,7 +46,7 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertV
             itemView.setOnClickListener(this);
         }
 
-        // click event gets the Dessert object and passes it to the recycler click handler
+        // on item click pass the Dessert object to MainActivity through the handler interface
         @Override
         public void onClick(View itemView) {
 
@@ -55,7 +56,7 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertV
             mClickHandler.onRecyclerItemClick(dessert);
         }
 
-        // called by the adapter to set text in the item TextView
+        // set the text in the item textview
         void bind(String recipeName) {
             mDessertNameTv.setText(recipeName);
         }
@@ -77,13 +78,13 @@ public class DessertAdapter extends RecyclerView.Adapter<DessertAdapter.DessertV
     @Override
     public void onBindViewHolder(@NonNull DessertViewHolder viewHolder, int position) {
 
-        // check that the list of desserts has been properly initialized
+        // check that the list of desserts exists and has been properly initialized
         if (mDesserts != null && mDesserts.size() > 0) {
 
-            // get current dessert
+            // get current Dessert
             Dessert dessert = mDesserts.get(position);
 
-            // call into holder class to update the poster image for this item
+            // call into holder class to bind data to textview for this item
             String recipeName = dessert.getName();
             viewHolder.bind(recipeName);
         }

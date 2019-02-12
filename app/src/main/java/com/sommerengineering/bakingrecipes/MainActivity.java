@@ -15,6 +15,11 @@ import android.widget.TextView;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MainActivity extends AppCompatActivity implements DessertAdapter.DessertAdapterOnClickHandler {
 
@@ -58,24 +63,24 @@ public class MainActivity extends AppCompatActivity implements DessertAdapter.De
             mRecycler.setAdapter(mAdapter);
         }
 
-
-
         // TODO background thread for testing
-        new Thread(new Runnable() {
-
-            public void run() {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<ArrayList<Dessert>> result = executor.submit(new Callable<ArrayList<Dessert>>() {
+            @Override
+            public ArrayList<Dessert> call() throws Exception {
 
                 URL url = Utilities.getUdacityUrl();
-                Log.e(LOG_TAG, "~~ " + url.toString());
-
                 String responseJson = Utilities.getJsonResponseFromHttp(url);
-                Log.e(LOG_TAG, "~~ " + responseJson);
-
-                ArrayList<Dessert> desserts = Utilities.extractDessertsFromJson(responseJson);
-                Log.e(LOG_TAG, "~~ " + desserts.get(0));
-
+                return Utilities.extractDessertsFromJson(responseJson);
             }
-        }).start();
+        });
+
+        try {
+            ArrayList<Dessert> desserts = result.get();
+            mAdapter.addAll(desserts);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "~~ " + e.toString());
+        }
 
     }
 
