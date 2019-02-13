@@ -11,6 +11,8 @@ import android.text.InputType;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -115,7 +117,8 @@ public class DetailActivity extends AppCompatActivity {
             position = createTv(mStepsContainer, shortDescription, position, 18, "RIGHT_OF", R.color.black);
 
             if (!videoPath.isEmpty())
-                position = createTv(mStepsContainer, "video", position, 12, "BELOW", R.color.gray);
+//                position = createTv(mStepsContainer, "video", position, 12, "BELOW", R.color.gray);
+                position = createIb(mStepsContainer, position, step);
             else position = createTv(mStepsContainer, "", position, 12, "BELOW", R.color.gray);
 
             if (!thumbnailPath.isEmpty())
@@ -124,7 +127,7 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    //
+    // creates a new TextView with the given parameters and returns its position (ID)
     private int createTv(ViewGroup container, String text, int position, int textSize, String alignment, int color) {
 
         // new TextView
@@ -161,4 +164,36 @@ public class DetailActivity extends AppCompatActivity {
         container.addView(textView);
         return textView.getId();
     }
+
+    // creates a new ImageView with the given parameters and returns its position (ID)
+    // (ViewGroup container, String text, int position, int textSize, String alignment, int color)
+    private int createIb(ViewGroup container, int position, Step step) {
+
+        // new ImageButton
+        ImageButton imageButton = new ImageButton(mContext);
+
+        // layout size and position are defined in LayoutParams
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.addRule(RelativeLayout.RIGHT_OF, position);
+        layoutParams.addRule(RelativeLayout.ALIGN_TOP, position);
+
+        // bind these layout parameters to the imagebutton
+        imageButton.setLayoutParams(layoutParams);
+
+        // have the Android system create a unique ID
+        imageButton.setId(View.generateViewId());
+
+        // TODO fix ripple and alignment
+        imageButton.setImageResource(R.drawable.play);
+        imageButton.setBackground(null);
+
+        // TODO set listener with Step as extra
+
+        // add the textview to the container layout and return its position for the next View
+        container.addView(imageButton);
+        return imageButton.getId();
+
+    }
+
 }
