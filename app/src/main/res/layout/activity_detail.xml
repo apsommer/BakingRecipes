@@ -58,6 +58,7 @@
             android:id="@+id/rl_ingredients_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_spacing"
             android:background="@android:color/white" >
 
             <TextView
@@ -65,13 +66,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/adamina"
-                android:textSize="18sp"
+                android:textSize="12sp"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:background="@null"
-                android:text="INGREDIENTS"
-                android:layout_margin="8dp" />
+                android:text="INGREDIENTS" />
 
             <View
                 android:id="@+id/ingredients_divider"
@@ -79,11 +79,10 @@
                 android:layout_height="1dp"
                 android:background="@color/black"
                 android:layout_below="@id/tv_ingredients_label"
-                android:layout_marginLeft="@dimen/detail_spacing"
-                android:layout_marginRight="@dimen/detail_spacing"
+                android:layout_marginTop="@dimen/detail_spacing"
                 android:layout_marginBottom="@dimen/detail_spacing" />
 
-            <!-- Ingredients dynamically loaded here -->
+            <!-- Ingredients dynamically created here -->
 
         </RelativeLayout>
 
@@ -91,6 +90,7 @@
             android:id="@+id/rl_steps_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_spacing"
             android:background="@android:color/white" >
 
         <TextView
@@ -98,13 +98,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/adamina"
-            android:textSize="18sp"
+            android:textSize="12sp"
             android:textAllCaps="true"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:background="@null"
-            android:text="STEPS"
-            android:layout_margin="8dp" />
+            android:text="STEPS" />
 
         <View
             android:id="@+id/steps_divider"
@@ -112,12 +111,10 @@
             android:layout_height="1dp"
             android:background="@color/black"
             android:layout_below="@id/tb_steps_label"
-            android:layout_marginLeft="@dimen/detail_spacing"
-            android:layout_marginRight="@dimen/detail_spacing"
-            android:layout_marginBottom="@dimen/detail_spacing"
-            />
+            android:layout_marginTop="@dimen/detail_spacing"
+            android:layout_marginBottom="@dimen/detail_spacing" />
 
-            <!-- Steps dynamically loaded here -->
+            <!-- Steps dynamically created here -->
 
         </RelativeLayout>
     </LinearLayout>

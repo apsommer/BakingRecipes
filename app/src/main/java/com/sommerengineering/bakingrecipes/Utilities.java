@@ -181,8 +181,11 @@ public final class Utilities {
 
     // convert dp to raw pixels
     public static int dpToPx(Context context, float dp) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+
+        // get the current device screen dimensions
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
+        return Math.round(dp * displayMetrics.density);
     }
 
 }

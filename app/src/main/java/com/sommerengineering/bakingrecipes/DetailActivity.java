@@ -104,15 +104,23 @@ public class DetailActivity extends AppCompatActivity {
             // get the current Ingredient and extract its basic attributes
             Step step = steps.get(i);
 
+            final String id = String.valueOf(step.getId()) + ". ";
             final String shortDescription = step.getShortDescription();
             final String description = step.getDescription();
             final String videoPath = step.getVideoPath();
             final String thumbnailPath = step.getThumbnailPath();
 
             // create a textview for each attribute; the position of the new view is returned
-            position = createTv(mStepsContainer, shortDescription, position, 18, "BELOW", R.color.black);
-//            position = createTv(quantity, position, 12, "BELOW", R.color.gray);
-//            position = createTv(measure, position, 12, "RIGHT_OF", R.color.gray);
+            position = createTv(mStepsContainer, id, position, 18, "BELOW", R.color.black);
+            position = createTv(mStepsContainer, shortDescription, position, 18, "RIGHT_OF", R.color.black);
+
+            if (!videoPath.isEmpty())
+                position = createTv(mStepsContainer, "video", position, 12, "BELOW", R.color.gray);
+            else position = createTv(mStepsContainer, "", position, 12, "BELOW", R.color.gray);
+
+            if (!thumbnailPath.isEmpty())
+                position = createTv(mStepsContainer, "image", position, 12, "RIGHT_OF", R.color.gray);
+
         }
     }
 
@@ -122,11 +130,9 @@ public class DetailActivity extends AppCompatActivity {
         // new TextView
         TextView textView = new TextView(mContext);
 
-        // size and position defined in layout parameters
+        // layout size and position are defined in LayoutParams
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        int marginStart = Utilities.dpToPx(mContext, getResources().getDimension(R.dimen.detail_spacing));
-        layoutParams.setMarginStart(marginStart);
 
         if (alignment.equals("BELOW")) {
             layoutParams.addRule(RelativeLayout.BELOW, position);
@@ -134,7 +140,6 @@ public class DetailActivity extends AppCompatActivity {
         else if (alignment.equals("RIGHT_OF")) {
             layoutParams.addRule(RelativeLayout.RIGHT_OF, position);
             layoutParams.addRule(RelativeLayout.ALIGN_TOP, position);
-            layoutParams.setMarginStart(0);
         }
 
         // bind these layout parameters to the textview
@@ -143,7 +148,7 @@ public class DetailActivity extends AppCompatActivity {
         // have the Android system create a unique ID
         textView.setId(View.generateViewId());
 
-        // set text, size and color
+        // set text size and color
         textView.setText(text);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         textView.setTextColor(getResources().getColor(color));
@@ -152,7 +157,7 @@ public class DetailActivity extends AppCompatActivity {
         Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
         textView.setTypeface(font);
 
-        // add the textview to the layout and return its position
+        // add the textview to the container layout and return its position for the next View
         container.addView(textView);
         return textView.getId();
     }
