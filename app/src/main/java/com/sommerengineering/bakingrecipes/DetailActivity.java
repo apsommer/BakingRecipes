@@ -32,9 +32,10 @@ public class DetailActivity extends AppCompatActivity {
     private Dessert mDessert;
 
     // bind views using Butterknife library
-    @BindView(R.id.rl_container) RelativeLayout mRelativeLayout;
     @BindView(R.id.tv_name) TextView mNameTv;
     @BindView(R.id.tv_servings) TextView mServingsTv;
+    @BindView(R.id.rl_ingredients_container) RelativeLayout mIngredientsContainer;
+    @BindView(R.id.rl_steps_container) RelativeLayout mStepsContainer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,19 +54,18 @@ public class DetailActivity extends AppCompatActivity {
         mDessert = (Dessert) intent.getSerializableExtra("selectedDessert");
 
         // simple method to bind title textviews for dessert name and number of servings
-        int position = setTitles();
+        setTitles();
 
         // method iterates through an ArrayList<Ingredient> and dynamically creates views
-        position = setIngredients(mDessert.getIngredients(), position);
+        setIngredients(mDessert.getIngredients(), R.id.ingredients_divider);
 
         // method iterates through an ArrayList<Step> and dynamically creates views
-//        setSteps(mDessert.getSteps());
-
+        setSteps(mDessert.getSteps(), R.id.steps_divider);
 
     }
 
     // simple method to bind title textviews
-    private int setTitles() {
+    private void setTitles() {
 
         // get basic attributes of this dessert
         String name = mDessert.getName();
@@ -74,13 +74,10 @@ public class DetailActivity extends AppCompatActivity {
         // set textviews for title and servings
         mNameTv.setText(name);
         mServingsTv.setText(String.valueOf(servings));
-
-        // return the position of the last view
-        return R.id.ll_servings_container;
     }
 
     // bind Ingredient data to dynamically created textviews
-    private int setIngredients(ArrayList<Ingredient> ingredients, int position) {
+    private void setIngredients(ArrayList<Ingredient> ingredients, int position) {
 
         // loop through all Ingredients in the list
         for (int i = 0; i < ingredients.size(); i++) {
@@ -92,16 +89,35 @@ public class DetailActivity extends AppCompatActivity {
             final String measure = ingredient.getMeasure().toLowerCase();
 
             // create a textview for each attribute; the position of the new view is returned
-            position = createTv(name, position, 22, "BELOW", R.color.black);
-            position = createTv(quantity, position, 12, "BELOW", R.color.gray);
-            position = createTv(measure, position, 12, "RIGHT_OF", R.color.gray);
+            position = createTv(mIngredientsContainer, name, position, 18, "BELOW", R.color.black);
+            position = createTv(mIngredientsContainer, quantity, position, 12, "BELOW", R.color.gray);
+            position = createTv(mIngredientsContainer, measure, position, 12, "RIGHT_OF", R.color.gray);
         }
+    }
 
-        return position;
+    // bind Ingredient data to dynamically created textviews
+    private void setSteps(ArrayList<Step> steps, int position) {
+
+        // loop through all Ingredients in the list
+        for (int i = 0; i < steps.size(); i++) {
+
+            // get the current Ingredient and extract its basic attributes
+            Step step = steps.get(i);
+
+            final String shortDescription = step.getShortDescription();
+            final String description = step.getDescription();
+            final String videoPath = step.getVideoPath();
+            final String thumbnailPath = step.getThumbnailPath();
+
+            // create a textview for each attribute; the position of the new view is returned
+            position = createTv(mStepsContainer, shortDescription, position, 18, "BELOW", R.color.black);
+//            position = createTv(quantity, position, 12, "BELOW", R.color.gray);
+//            position = createTv(measure, position, 12, "RIGHT_OF", R.color.gray);
+        }
     }
 
     //
-    private int createTv(String name, int position, int textSize, String alignment, int color) {
+    private int createTv(ViewGroup container, String text, int position, int textSize, String alignment, int color) {
 
         // new TextView
         TextView textView = new TextView(mContext);
@@ -127,8 +143,8 @@ public class DetailActivity extends AppCompatActivity {
         // have the Android system create a unique ID
         textView.setId(View.generateViewId());
 
-        //
-        textView.setText(name);
+        // set text, size and color
+        textView.setText(text);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         textView.setTextColor(getResources().getColor(color));
 
@@ -137,9 +153,7 @@ public class DetailActivity extends AppCompatActivity {
         textView.setTypeface(font);
 
         // add the textview to the layout and return its position
-        mRelativeLayout.addView(textView);
+        container.addView(textView);
         return textView.getId();
-
     }
-
 }

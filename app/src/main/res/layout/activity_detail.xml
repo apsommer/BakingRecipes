@@ -6,24 +6,22 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark" >
 
-    <RelativeLayout
-        android:id="@+id/rl_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/detail_spacing"
-        android:background="@android:color/white" >
+        android:background="@color/white"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             android:fontFamily="@font/adamina"
             android:textSize="32sp"
             android:textColor="@android:color/black"
             android:background="@null"
             tools:text="Crumble Cake"
-            android:layout_alignParentTop="true"
             android:layout_marginTop="8dp" />
 
         <LinearLayout
@@ -31,9 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@id/tv_name" >
+            android:gravity="center" >
 
             <TextView
                 android:id="@+id/tv_servings"
@@ -57,5 +53,72 @@
                 android:text=" servings" />
 
         </LinearLayout>
-    </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white" >
+
+            <TextView
+                android:id="@+id/tv_ingredients_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/adamina"
+                android:textSize="18sp"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:background="@null"
+                android:text="INGREDIENTS"
+                android:layout_margin="8dp" />
+
+            <View
+                android:id="@+id/ingredients_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                android:layout_below="@id/tv_ingredients_label"
+                android:layout_marginLeft="@dimen/detail_spacing"
+                android:layout_marginRight="@dimen/detail_spacing"
+                android:layout_marginBottom="@dimen/detail_spacing" />
+
+            <!-- Ingredients dynamically loaded here -->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_steps_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white" >
+
+        <TextView
+            android:id="@+id/tb_steps_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/adamina"
+            android:textSize="18sp"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:background="@null"
+            android:text="STEPS"
+            android:layout_margin="8dp" />
+
+        <View
+            android:id="@+id/steps_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_below="@id/tb_steps_label"
+            android:layout_marginLeft="@dimen/detail_spacing"
+            android:layout_marginRight="@dimen/detail_spacing"
+            android:layout_marginBottom="@dimen/detail_spacing"
+            />
+
+            <!-- Steps dynamically loaded here -->
+
+        </RelativeLayout>
+    </LinearLayout>
 </ScrollView>
