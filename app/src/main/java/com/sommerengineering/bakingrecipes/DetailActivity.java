@@ -91,9 +91,12 @@ public class DetailActivity extends AppCompatActivity {
             final String measure = ingredient.getMeasure().toLowerCase();
 
             // create a textview for each attribute; the position of the new view is returned
-            position = createTextView(mIngredientsContainer, name, position, 18, "BELOW", R.color.black);
-            position = createTextView(mIngredientsContainer, quantity, position, 12, "BELOW", R.color.gray);
-            position = createTextView(mIngredientsContainer, measure, position, 12, "RIGHT_OF", R.color.gray);
+            position = createTextView(mIngredientsContainer, name, position,
+                    18, "BELOW", 0, R.color.black);
+            position = createTextView(mIngredientsContainer, quantity, position,
+                    12, "BELOW", 0, R.color.gray);
+            position = createTextView(mIngredientsContainer, measure, position,
+                    12, "RIGHT_OF", 0, R.color.gray);
         }
     }
 
@@ -121,14 +124,15 @@ public class DetailActivity extends AppCompatActivity {
 
             // else create a simple textview
             } else {
-                position = createTextView(mStepsContainer, buttonText, position, 18, "BELOW", R.color.black);
-                position = createTextView(mStepsContainer, "", position, 8, "BELOW", R.color.black);
+                position = createTextView(mStepsContainer, buttonText, position,
+                        18, "BELOW", 20, R.color.black);
             }
         }
     }
 
     // creates a new TextView with the given parameters and returns its position (ID)
-    private int createTextView(ViewGroup container, String text, int position, int textSize, String alignment, int color) {
+    private int createTextView(ViewGroup container, String text, int position,
+                               int textSize, String alignment, int margin, int color) {
 
         // new TextView
         TextView textView = new TextView(mContext);
@@ -136,6 +140,10 @@ public class DetailActivity extends AppCompatActivity {
         // layout size and position are defined in LayoutParams
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        // set padding
+        int marginPx = Utilities.dpToPx(mContext, margin);
+        layoutParams.setMargins(0, marginPx, 0, marginPx);
 
         if (alignment.equals("BELOW")) {
             layoutParams.addRule(RelativeLayout.BELOW, position);
@@ -176,14 +184,13 @@ public class DetailActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.BELOW, position);
 
-        // bind these layout parameters to the imagebutton
+        // bind these layout parameters to the button
         button.setLayoutParams(layoutParams);
 
         // have the Android system create a unique ID
         button.setId(View.generateViewId());
 
-        // set the drawable as the play icon and text attributes
-        button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
+        // set text attributes
         button.setText(text);
         button.setTextColor(getResources().getColor(R.color.black));
         button.setAllCaps(false);
@@ -193,14 +200,15 @@ public class DetailActivity extends AppCompatActivity {
         Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
         button.setTypeface(font);
 
-        // ripple effect on button press
+        // set the drawable and ripple effect on button press
+        button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
         Drawable background = getResources().getDrawable(R.drawable.white);
         int color = getResources().getColor(R.color.gray);
         ColorStateList colorStateList = new ColorStateList(new int[][]{ new int[]{}}, new int[]{color});
         RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, background, null);
         button.setBackground(rippleDrawable);
 
-        // add the textview to the container layout and return its position for the next View
+        // add the button to the container layout and return its position for the next View
         container.addView(button);
         return button.getId();
 
