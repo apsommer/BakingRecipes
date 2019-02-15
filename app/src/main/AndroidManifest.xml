@@ -21,6 +21,7 @@
         <!-- TODO this will ultimately be a fragment -->
         <activity
             android:name=".MainActivity"
+            android:label="Baking Recipes"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,13 +29,22 @@
             </intent-filter>
         </activity>
 
-        <!-- detailed activity shows all recipe metadata -->
+        <!-- detail activity shows recipe metadata with dynamically created textviews and buttons -->
         <activity
             android:name=".DetailActivity"
-            android:label="Recipe Name" >
+            android:label="Recipe Details" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sommerengineering.bakingrecipes.MainActivity" />
+        </activity>
+
+        <!-- player activity shows details of a given recipe step, and plays a video if available -->
+        <activity
+            android:name=".PlayerActivity"
+            android:label="Step Details" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sommerengineering.bakingrecipes.DetailActivity" />
         </activity>
 
         <!-- custom font -->

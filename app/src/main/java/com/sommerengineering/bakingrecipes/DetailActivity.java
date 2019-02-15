@@ -63,7 +63,6 @@ public class DetailActivity extends AppCompatActivity {
 
         // method iterates through an ArrayList<Step> and dynamically creates views
         setSteps(mDessert.getSteps(), R.id.steps_divider);
-
     }
 
     // simple method to bind title textviews
@@ -174,7 +173,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     // creates a new ImageView with the given parameters and returns its position (ID)
-    private int createButton(ViewGroup container, String text, int position, int drawable, Step step) {
+    private int createButton(ViewGroup container, String text, int position,
+                             int drawable, final Step step) {
 
         // new Button
         Button button = new Button(mContext);
@@ -208,12 +208,20 @@ public class DetailActivity extends AppCompatActivity {
         RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, background, null);
         button.setBackground(rippleDrawable);
 
+        // set a click listener who's click starts PlayerActivity
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // bundle the stepId and ArrayList<Step> into an explicit intent for PlayerActivity
+                Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
+                intentToStartPlayerActivity.putExtra("selectedStep", step);
+                startActivity(intentToStartPlayerActivity);
+            }
+        });
+
         // add the button to the container layout and return its position for the next View
         container.addView(button);
         return button.getId();
-
-        // TODO set listener with Step as extra in intent to open new PlayerActivity
-
     }
-
 }
