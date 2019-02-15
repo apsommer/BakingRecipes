@@ -40,4 +40,7 @@ dependencies {
 
     // Picasso image downloading and caching library
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // ExoPlayer media controller and media player library
+    implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
 }

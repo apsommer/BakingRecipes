@@ -1,6 +1,7 @@
 package com.sommerengineering.bakingrecipes;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -187,5 +188,4 @@ public final class Utilities {
 
         return Math.round(dp * displayMetrics.density);
     }
-
 }

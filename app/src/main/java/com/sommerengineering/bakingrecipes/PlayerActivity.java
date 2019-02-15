@@ -2,7 +2,9 @@ package com.sommerengineering.bakingrecipes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -13,6 +15,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,6 +47,7 @@ public class PlayerActivity extends AppCompatActivity {
     private int mStepId;
     private Step mPreviousStep;
     private Step mNextStep;
+    private SimpleExoPlayer mExoPlayer;
 
     // bind views using Butterknife library
     @BindView(R.id.tv_short_description) TextView mShortDescriptionTv;
@@ -42,6 +57,7 @@ public class PlayerActivity extends AppCompatActivity {
     @BindView(R.id.ib_right_arrow) ImageButton mRightArrowIb;
     @BindView(R.id.tv_next_step) TextView mNextStepTv;
     @BindView(R.id.iv_step_image) ImageView mThumbnailIv;
+    @BindView(R.id.exo_player_view) SimpleExoPlayerView mExoPlayerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,10 +89,11 @@ public class PlayerActivity extends AppCompatActivity {
         // set click listeners on the left and right navigation arrows
         setNavigationArrows();
 
-        // if it exists, load the image into the UI using the Picasso library
+        // load the step image into the UI using the Picasso library
         setImage();
 
-        // TODO implement ExoPlayer
+        // load the step video into the UI using ExoPlayer
+        setVideo();
 
     }
 
@@ -157,6 +174,9 @@ public class PlayerActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
+                    // stop the playing video
+                    mExoPlayer.stop();
+
                     // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
                     Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
                     intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
@@ -173,6 +193,9 @@ public class PlayerActivity extends AppCompatActivity {
             mRightArrowIb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    // stop the playing video
+                    mExoPlayer.stop();
 
                     // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
                     Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
@@ -209,6 +232,44 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    //
+    private void setVideo() {
+
+        // extract the video URL from the current step
+        String videoPath = mStep.getVideoPath();
+
+        // convert path string to path URI
+        Uri videoUri = Uri.parse(videoPath);
+
+        // check that the URI is valid
+        if (videoUri != null) {
+
+            // set the default artwork while the player loads, also shown if no video exists
+            mExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
+                    getResources(), R.drawable.video_placeholder));
+
+            // instantiate the player using a default track selector and load control
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
+
+            // associate the player to the player view
+            mExoPlayerView.setPlayer(mExoPlayer);
+
+            // prepare the media source using a default data source factory and extractors factory
+            String userAgent = Util.getUserAgent(this, "BakingRecipes");
+            DefaultDataSourceFactory sourceFactory = new DefaultDataSourceFactory(this, userAgent);
+            DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            MediaSource mediaSource = new ExtractorMediaSource(videoUri, sourceFactory,
+                    extractorsFactory, null, null);
+
+            // prepare the player with the media source and play when ready
+            mExoPlayer.prepare(mediaSource);
+            mExoPlayer.setPlayWhenReady(true);
+
+        }
+    }
+
     // ensure that the back button returns the user to the DetailActivity
     @Override
     public void onBackPressed() {
@@ -217,5 +278,14 @@ public class PlayerActivity extends AppCompatActivity {
         Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
         intentToStartDetailActivity.putExtra("selectedDessert", mDessert);
         startActivity(intentToStartDetailActivity);
+    }
+
+    // release the ExoPlayer when the activity is destroyed
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mExoPlayer.stop();
+        mExoPlayer.release();
+        mExoPlayer = null;
     }
 }

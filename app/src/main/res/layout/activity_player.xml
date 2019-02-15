@@ -35,19 +35,16 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/exo_player_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_gravity="center"
-            android:fontFamily="@font/adamina"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:background="@color/gray"
-            android:gravity="center"
-            android:text="ExoPlayer"
-            android:layout_marginTop="8dp"
+            android:layout_margin="8dp"
             />
 
+        <!-- this is not actually used for the given JSON payload but included here
+        as a placeholder for completeness -->
         <ImageView
             android:id="@+id/iv_step_image"
             android:layout_width="wrap_content"
