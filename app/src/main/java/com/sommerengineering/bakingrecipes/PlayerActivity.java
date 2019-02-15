@@ -2,14 +2,18 @@ package com.sommerengineering.bakingrecipes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -37,6 +41,7 @@ public class PlayerActivity extends AppCompatActivity {
     @BindView(R.id.tv_previous_step) TextView mPreviousStepTv;
     @BindView(R.id.ib_right_arrow) ImageButton mRightArrowIb;
     @BindView(R.id.tv_next_step) TextView mNextStepTv;
+    @BindView(R.id.iv_step_image) ImageView mThumbnailIv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,11 +73,10 @@ public class PlayerActivity extends AppCompatActivity {
         // set click listeners on the left and right navigation arrows
         setNavigationArrows();
 
-        // method iterates through an ArrayList<Ingredient> and dynamically creates views
-//        setIngredients(mDessert.getIngredients(), R.id.ingredients_divider);
+        // if it exists, load the image into the UI using the Picasso library
+        setImage();
 
-        // method iterates through an ArrayList<Step> and dynamically creates views
-//        setSteps(mDessert.getSteps(), R.id.steps_divider);
+        // TODO implement ExoPlayer
 
     }
 
@@ -177,6 +181,31 @@ public class PlayerActivity extends AppCompatActivity {
                     startActivity(intentToStartPlayerActivity);
                 }
             });
+        }
+    }
+
+    // load the step image if it exists
+    private void setImage() {
+
+        // extract image URL from current step
+        String thumbnailPath = mStep.getThumbnailPath();
+
+        // Udacity deliberately put the video URL into the image URL JSON key for
+        // Nutella Pie > Step 5 ... catch this error here by swapping the attributes
+        if (thumbnailPath.contains(".mp4")) {
+            mStep.setThumbnailPath(null);
+            mStep.setVideoPath(thumbnailPath);
+        }
+
+        // check that the image URL is valid
+        if (thumbnailPath != null && !thumbnailPath.isEmpty()) {
+
+            // ! placeholder image must be set for the Picasso library to load correctly
+            ColorDrawable simpleColor =
+                    new ColorDrawable(mContext.getResources().getColor(R.color.white));
+
+            // load image into UI using Picasso library
+            Picasso.with(mContext).load(thumbnailPath).placeholder(simpleColor).into(mThumbnailIv);
         }
     }
 

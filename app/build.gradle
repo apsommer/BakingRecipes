@@ -37,4 +37,7 @@ dependencies {
 
     // String processing library from Apache
     implementation 'org.apache.commons:commons-lang3:3.6'
+
+    // Picasso image downloading and caching library
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
