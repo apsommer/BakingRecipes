@@ -6,18 +6,14 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 
@@ -91,13 +87,13 @@ public class DetailActivity extends AppCompatActivity {
             final String measure = ingredient.getMeasure().toLowerCase();
 
             // create a textview for each attribute; the position of the new view is returned
-            position = createTv(mIngredientsContainer, name, position, 18, "BELOW", R.color.black);
-            position = createTv(mIngredientsContainer, quantity, position, 12, "BELOW", R.color.gray);
-            position = createTv(mIngredientsContainer, measure, position, 12, "RIGHT_OF", R.color.gray);
+            position = createTextView(mIngredientsContainer, name, position, 18, "BELOW", R.color.black);
+            position = createTextView(mIngredientsContainer, quantity, position, 12, "BELOW", R.color.gray);
+            position = createTextView(mIngredientsContainer, measure, position, 12, "RIGHT_OF", R.color.gray);
         }
     }
 
-    // bind Ingredient data to dynamically created textviews
+    // bind Step data to dynamically created textviews
     private void setSteps(ArrayList<Step> steps, int position) {
 
         // loop through all Ingredients in the list
@@ -106,29 +102,34 @@ public class DetailActivity extends AppCompatActivity {
             // get the current Ingredient and extract its basic attributes
             Step step = steps.get(i);
 
-            final String id = String.valueOf(step.getId()) + ". ";
+            final String id = String.valueOf(step.getId());
             final String shortDescription = step.getShortDescription();
             final String description = step.getDescription();
             final String videoPath = step.getVideoPath();
             final String thumbnailPath = step.getThumbnailPath();
 
-            // create a textview for each attribute; the position of the new view is returned
-            position = createTv(mStepsContainer, id, position, 18, "BELOW", R.color.black);
-            position = createTv(mStepsContainer, shortDescription, position, 18, "RIGHT_OF", R.color.black);
+            // concatenate id and shortDescription for button
+            final String buttonText = " " + id + ". " + shortDescription;
 
-            if (!videoPath.isEmpty())
-//                position = createTv(mStepsContainer, "video", position, 12, "BELOW", R.color.gray);
-                position = createIb(mStepsContainer, position, step);
-            else position = createTv(mStepsContainer, "", position, 12, "BELOW", R.color.gray);
+            // if an image or video exists for this step TODO ...
+            if (!videoPath.isEmpty() || !thumbnailPath.isEmpty()) {
 
-            if (!thumbnailPath.isEmpty())
-                position = createTv(mStepsContainer, "image", position, 12, "RIGHT_OF", R.color.gray);
+                position = createButton(mStepsContainer, buttonText, position, R.drawable.play, step);
+
+            // no image or video exists for this step
+            }
+            else {
+
+                // create a textview for each attribute; the position of the new view is returned
+//                position = createTextView(mStepsContainer, id, position, 18, "BELOW", R.color.black);
+//                position = createTextView(mStepsContainer, shortDescription, position, 18, "RIGHT_OF", R.color.black);
+            }
 
         }
     }
 
     // creates a new TextView with the given parameters and returns its position (ID)
-    private int createTv(ViewGroup container, String text, int position, int textSize, String alignment, int color) {
+    private int createTextView(ViewGroup container, String text, int position, int textSize, String alignment, int color) {
 
         // new TextView
         TextView textView = new TextView(mContext);
@@ -142,7 +143,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         else if (alignment.equals("RIGHT_OF")) {
             layoutParams.addRule(RelativeLayout.RIGHT_OF, position);
-            layoutParams.addRule(RelativeLayout.ALIGN_TOP, position);
+            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, position);
         }
 
         // bind these layout parameters to the textview
@@ -166,33 +167,37 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     // creates a new ImageView with the given parameters and returns its position (ID)
-    // (ViewGroup container, String text, int position, int textSize, String alignment, int color)
-    private int createIb(ViewGroup container, int position, Step step) {
+    private int createButton(ViewGroup container, String text, int position, int drawable, Step step) {
 
-        // new ImageButton
-        ImageButton imageButton = new ImageButton(mContext);
+        // new Button
+        Button button = new Button(mContext);
 
         // layout size and position are defined in LayoutParams
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.addRule(RelativeLayout.RIGHT_OF, position);
-        layoutParams.addRule(RelativeLayout.ALIGN_TOP, position);
+        layoutParams.addRule(RelativeLayout.BELOW, position);
 
         // bind these layout parameters to the imagebutton
-        imageButton.setLayoutParams(layoutParams);
+        button.setLayoutParams(layoutParams);
 
         // have the Android system create a unique ID
-        imageButton.setId(View.generateViewId());
+        button.setId(View.generateViewId());
 
         // TODO fix ripple and alignment
-        imageButton.setImageResource(R.drawable.play);
-        imageButton.setBackground(null);
+        button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
+        button.setText(text);
 
-        // TODO set listener with Step as extra
+        button.setAllCaps(false);
+
+        // custom font
+        Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
+        button.setTypeface(font);
+
+        // TODO set listener with Step as extra in intent to open new PlayerActivity
 
         // add the textview to the container layout and return its position for the next View
-        container.addView(imageButton);
-        return imageButton.getId();
+        container.addView(button);
+        return button.getId();
 
     }
 
