@@ -2,7 +2,11 @@ package com.sommerengineering.bakingrecipes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -109,22 +113,17 @@ public class DetailActivity extends AppCompatActivity {
             final String thumbnailPath = step.getThumbnailPath();
 
             // concatenate id and shortDescription for button
-            final String buttonText = " " + id + ". " + shortDescription;
+            final String buttonText = " " + id + ". " + shortDescription + " ";
 
-            // if an image or video exists for this step TODO ...
+            // if an image or video exists for this step create a button for it
             if (!videoPath.isEmpty() || !thumbnailPath.isEmpty()) {
-
                 position = createButton(mStepsContainer, buttonText, position, R.drawable.play, step);
 
-            // no image or video exists for this step
+            // else create a simple textview
+            } else {
+                position = createTextView(mStepsContainer, buttonText, position, 18, "BELOW", R.color.black);
+                position = createTextView(mStepsContainer, "", position, 8, "BELOW", R.color.black);
             }
-            else {
-
-                // create a textview for each attribute; the position of the new view is returned
-//                position = createTextView(mStepsContainer, id, position, 18, "BELOW", R.color.black);
-//                position = createTextView(mStepsContainer, shortDescription, position, 18, "RIGHT_OF", R.color.black);
-            }
-
         }
     }
 
@@ -183,21 +182,29 @@ public class DetailActivity extends AppCompatActivity {
         // have the Android system create a unique ID
         button.setId(View.generateViewId());
 
-        // TODO fix ripple and alignment
+        // set the drawable as the play icon and text attributes
         button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
         button.setText(text);
-
+        button.setTextColor(getResources().getColor(R.color.black));
         button.setAllCaps(false);
+        button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 
         // custom font
         Typeface font = Typeface.createFromAsset(getAssets(), "adamina.ttf");
         button.setTypeface(font);
 
-        // TODO set listener with Step as extra in intent to open new PlayerActivity
+        // ripple effect on button press
+        Drawable background = getResources().getDrawable(R.drawable.white);
+        int color = getResources().getColor(R.color.gray);
+        ColorStateList colorStateList = new ColorStateList(new int[][]{ new int[]{}}, new int[]{color});
+        RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, background, null);
+        button.setBackground(rippleDrawable);
 
         // add the textview to the container layout and return its position for the next View
         container.addView(button);
         return button.getId();
+
+        // TODO set listener with Step as extra in intent to open new PlayerActivity
 
     }
 
