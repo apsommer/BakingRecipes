@@ -213,9 +213,9 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // bundle the stepId and ArrayList<Step> into an explicit intent for PlayerActivity
+                // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
                 Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
-                intentToStartPlayerActivity.putExtra("listOfSteps", steps);
+                intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
                 intentToStartPlayerActivity.putExtra("selectedStepId", stepId);
                 startActivity(intentToStartPlayerActivity);
             }
@@ -225,4 +225,12 @@ public class DetailActivity extends AppCompatActivity {
         container.addView(button);
         return button.getId();
     }
+
+    // ensure that the back button returns the user to the MainActivity
+    @Override
+    public void onBackPressed() {
+        Intent intentToStartMainActivity = new Intent(this, MainActivity.class);
+        startActivity(intentToStartMainActivity);
+    }
+
 }

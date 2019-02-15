@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ public class PlayerActivity extends AppCompatActivity {
 
     // member variables
     private Context mContext;
+    private Dessert mDessert;
     private ArrayList<Step> mSteps;
     private Step mStep;
     private int mStepId;
@@ -48,17 +50,23 @@ public class PlayerActivity extends AppCompatActivity {
         // reference to application context
         mContext = getApplicationContext();
 
-        // extract all Steps and the selected Step ID from intent
+        // extract the Dessert and Step ID from the intent
         Intent intent = getIntent();
-        mSteps = (ArrayList<Step>) intent.getSerializableExtra("listOfSteps");
+        mDessert = (Dessert) intent.getSerializableExtra("selectedDessert");
         mStepId = (int) intent.getSerializableExtra("selectedStepId");
+
+        // get the full list of steps for this dessert, and the current step
+        mSteps = mDessert.getSteps();
         mStep = mSteps.get(mStepId);
 
         // simple method to bind title textviews for dessert name and number of servings
         setTitles();
 
-        // get the previous and next steps and set their textview descriptions
+        // set the previous and next steps and set their textview descriptions
         setPreviousAndNextSteps();
+
+        // set click listeners on the left and right navigation arrows
+        setNavigationArrows();
 
         // method iterates through an ArrayList<Ingredient> and dynamically creates views
 //        setIngredients(mDessert.getIngredients(), R.id.ingredients_divider);
@@ -89,6 +97,7 @@ public class PlayerActivity extends AppCompatActivity {
             // hide the left arrow button and previous step short description
             mLeftArrowIb.setVisibility(View.GONE);
             mPreviousStepTv.setVisibility(View.GONE);
+            mPreviousStep = null;
 
             // get the next step and its short description
             mNextStep = mSteps.get(mStepId + 1);
@@ -122,6 +131,7 @@ public class PlayerActivity extends AppCompatActivity {
             // hide the right arrow button and next step short description
             mRightArrowIb.setVisibility(View.GONE);
             mNextStepTv.setVisibility(View.GONE);
+            mNextStep = null;
 
             // get the previous step and its short description
             mPreviousStep = mSteps.get(mStepId - 1);
@@ -130,5 +140,53 @@ public class PlayerActivity extends AppCompatActivity {
             // set the text in the textview next to the left arrow
             mPreviousStepTv.setText(previousStepShortDescription);
         }
+    }
+
+    // load the left and right arrows to restart this activity with a new step
+    private void setNavigationArrows() {
+
+        // if a previous step exists then put a click listener on the left arrow
+        if (mPreviousStep != null) {
+
+            // restart this activity with the new step
+            mLeftArrowIb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
+                    Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
+                    intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
+                    intentToStartPlayerActivity.putExtra("selectedStepId", mStepId - 1);
+                    startActivity(intentToStartPlayerActivity);
+                }
+            });
+        }
+
+        // if a next step exists then put a click listener on the right arrow
+        if (mNextStep != null) {
+
+            // restart this activity with the new step
+            mRightArrowIb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
+                    Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
+                    intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
+                    intentToStartPlayerActivity.putExtra("selectedStepId", mStepId + 1);
+                    startActivity(intentToStartPlayerActivity);
+                }
+            });
+        }
+    }
+
+    // ensure that the back button returns the user to the DetailActivity
+    @Override
+    public void onBackPressed() {
+
+        // bundle the Dessert into an explicit intent for DetailActivity
+        Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
+        intentToStartDetailActivity.putExtra("selectedDessert", mDessert);
+        startActivity(intentToStartDetailActivity);
     }
 }
