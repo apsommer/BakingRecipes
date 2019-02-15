@@ -1,15 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark" >
 
-    <TextView
-        android:id="@+id/tv_empty_state"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World"
-        android:textSize="40dp"
-        android:layout_gravity="center" />
+        android:background="@color/white"
+        android:orientation="vertical" >
 
-</merge>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_margin="1dp">
+
+            <TextView
+                android:id="@+id/tv_short_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/adamina"
+                android:textSize="32sp"
+                android:textColor="@android:color/black"
+                android:background="@null"
+                tools:text="Preheat the oven."
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_placeholder"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/adamina"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:background="@color/gray"
+            android:gravity="center"
+            android:text="ExoPlayer"
+            android:layout_marginTop="8dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/adamina"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:background="@null"
+            tools:text="Preheat the oven to 350F. Butter a deep dish pan with cooking spray ..."
+            android:layout_margin="8dp"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageButton
+                android:id="@+id/ib_left_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_effect"
+                android:src="@drawable/left_arrow"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_previous_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/adamina"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:background="@null"
+                tools:text="Cut up carrots."
+                android:layout_toRightOf="@id/ib_left_arrow"
+                android:layout_centerVertical="true"
+                />
+
+            <TextView
+                android:id="@+id/tv_next_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/adamina"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:background="@null"
+                tools:text="Kneed the bread."
+                android:layout_toLeftOf="@id/ib_right_arrow"
+                android:layout_centerVertical="true"
+                />
+
+            <ImageButton
+                android:id="@+id/ib_right_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_effect"
+                android:src="@drawable/right_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

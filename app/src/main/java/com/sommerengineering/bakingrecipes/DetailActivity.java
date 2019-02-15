@@ -119,7 +119,7 @@ public class DetailActivity extends AppCompatActivity {
 
             // if an image or video exists for this step create a button for it
             if (!videoPath.isEmpty() || !thumbnailPath.isEmpty()) {
-                position = createButton(mStepsContainer, buttonText, position, R.drawable.play, step);
+                position = createButton(mStepsContainer, buttonText, position, R.drawable.play, steps, i);
 
             // else create a simple textview
             } else {
@@ -174,7 +174,7 @@ public class DetailActivity extends AppCompatActivity {
 
     // creates a new ImageView with the given parameters and returns its position (ID)
     private int createButton(ViewGroup container, String text, int position,
-                             int drawable, final Step step) {
+                             int drawable, final ArrayList<Step> steps, final int stepId) {
 
         // new Button
         Button button = new Button(mContext);
@@ -215,7 +215,8 @@ public class DetailActivity extends AppCompatActivity {
 
                 // bundle the stepId and ArrayList<Step> into an explicit intent for PlayerActivity
                 Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
-                intentToStartPlayerActivity.putExtra("selectedStep", step);
+                intentToStartPlayerActivity.putExtra("listOfSteps", steps);
+                intentToStartPlayerActivity.putExtra("selectedStepId", stepId);
                 startActivity(intentToStartPlayerActivity);
             }
         });
