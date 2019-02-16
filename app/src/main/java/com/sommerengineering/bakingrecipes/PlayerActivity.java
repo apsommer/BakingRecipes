@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,13 +17,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -34,7 +40,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity implements ExoPlayer.EventListener {
 
     // simple tag for log messages
     private static final String LOG_TAG = PlayerActivity.class.getSimpleName();
@@ -263,6 +269,9 @@ public class PlayerActivity extends AppCompatActivity {
             MediaSource mediaSource = new ExtractorMediaSource(videoUri, sourceFactory,
                     extractorsFactory, null, null);
 
+            // add an event listener, the listener only outputs log messages for now
+            mExoPlayer.addListener(this);
+
             // prepare the player with the media source and play when ready
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
@@ -287,5 +296,38 @@ public class PlayerActivity extends AppCompatActivity {
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;
+    }
+
+    // six ExoPlayer.EventListener methods simply output a log message
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest) {
+        Log.e(LOG_TAG, "onTimelineChanged");
+    }
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        Log.e(LOG_TAG, "onTracksChanged");
+    }
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+        Log.e(LOG_TAG, "onLoadingChanged");
+    }
+    @Override
+    public void onPlayerStateChanged(boolean isPlaying, int playbackState) {
+
+        Log.e(LOG_TAG, "onPlayerStateChanged");
+
+        if (isPlaying && playbackState == ExoPlayer.STATE_READY) {
+            Log.e(LOG_TAG, "onPlayerStateChanged: playing");
+        } else if (playbackState == ExoPlayer.STATE_READY) {
+            Log.e(LOG_TAG, "onPlayerStateChanged: paused");
+        }
+    }
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+        Log.e(LOG_TAG, "onPlayerError");
+    }
+    @Override
+    public void onPositionDiscontinuity() {
+        Log.e(LOG_TAG, "onPositionDiscontinuity");
     }
 }
