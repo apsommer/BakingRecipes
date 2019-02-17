@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/adamina"
+            android:textSize="32sp"
+            android:textColor="@android:color/black"
+            android:background="@null"
+            tools:text="Crumble Cake"
+            android:layout_marginTop="8dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_servings_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_servings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/adamina"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
+                android:background="@null"
+                tools:text="8" />
+
+            <TextView
+                android:id="@+id/tv_servings_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/adamina"
+                android:textColor="@color/gray"
+                android:textSize="12sp"
+                android:background="@null"
+                android:text=" servings" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_spacing"
+            android:background="@android:color/white" >
+
+            <TextView
+                android:id="@+id/tv_ingredients_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/adamina"
+                android:textSize="12sp"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:background="@null"
+                android:text="INGREDIENTS" />
+
+            <View
+                android:id="@+id/ingredients_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"
+                android:layout_below="@id/tv_ingredients_label"
+                android:layout_marginTop="@dimen/detail_spacing"
+                android:layout_marginBottom="@dimen/detail_spacing" />
+
+            <!-- Ingredients dynamically created here -->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_steps_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_spacing"
+            android:background="@android:color/white" >
+
+        <TextView
+            android:id="@+id/tb_steps_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/adamina"
+            android:textSize="12sp"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:background="@null"
+            android:text="STEPS" />
+
+        <View
+            android:id="@+id/steps_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_below="@id/tb_steps_label"
+            android:layout_marginTop="@dimen/detail_spacing"
+            android:layout_marginBottom="@dimen/detail_spacing" />
+
+            <!-- Steps dynamically created here -->
+
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>
