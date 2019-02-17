@@ -13,36 +13,26 @@
         android:background="@color/white"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_short_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_margin="1dp">
-
-            <TextView
-                android:id="@+id/tv_short_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/adamina"
-                android:textSize="32sp"
-                android:textColor="@android:color/black"
-                android:background="@null"
-                tools:text="Preheat the oven."
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                />
-
-        </LinearLayout>
+            android:fontFamily="@font/adamina"
+            android:textSize="32sp"
+            android:textColor="@android:color/black"
+            android:background="@null"
+            tools:text="Preheat the oven."
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            />
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/exo_player_view"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="8dp"
-            app:resize_mode="fit"
             />
 
         <!-- this is not actually used for the given JSON payload but included here

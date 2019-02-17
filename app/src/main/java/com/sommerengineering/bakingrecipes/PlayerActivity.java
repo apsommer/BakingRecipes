@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -30,6 +31,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -181,7 +183,7 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
                 public void onClick(View view) {
 
                     // stop the playing video
-                    mExoPlayer.stop();
+                    if (mExoPlayer != null) mExoPlayer.stop();
 
                     // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
                     Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
@@ -200,8 +202,8 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
                 @Override
                 public void onClick(View view) {
 
-                    // stop the playing video
-                    mExoPlayer.stop();
+                    // stop playing the video
+                    if (mExoPlayer != null) mExoPlayer.stop();
 
                     // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
                     Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
@@ -244,6 +246,11 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
         // extract the video URL from the current step
         String videoPath = mStep.getVideoPath();
 
+        if (videoPath == null || videoPath.isEmpty()) {
+            mExoPlayerView.setVisibility(View.GONE);
+            return;
+        }
+
         // convert path string to path URI
         Uri videoUri = Uri.parse(videoPath);
 
@@ -272,6 +279,9 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
             // add an event listener, the listener only outputs log messages for now
             mExoPlayer.addListener(this);
 
+            // scale video to the device width while maintaining aspect ratio
+            mExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+
             // prepare the player with the media source and play when ready
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
@@ -293,9 +303,13 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+
+        // if a video is playing then stop and release it
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     // six ExoPlayer.EventListener methods simply output a log message
