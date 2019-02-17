@@ -87,6 +87,7 @@ public class DetailFragment extends Fragment {
         // method iterates through an ArrayList<Step> and dynamically creates views
         setSteps(mDessert.getSteps(), R.id.steps_divider);
 
+        // return the inflated view
         return rootView;
     }
 
@@ -232,7 +233,8 @@ public class DetailFragment extends Fragment {
         RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
         button.setBackground(rippleDrawable);
 
-        // set a click listener who's click starts PlayerActivity
+        // set a click listener who's click calls back into DetailActivity
+        // and starts PlayerFragment with the selected Dessert and the step ID
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -7,18 +7,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -47,10 +46,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlayerActivity extends AppCompatActivity implements ExoPlayer.EventListener {
+public class PlayerFragment extends Fragment implements ExoPlayer.EventListener {
 
     // simple tag for log messages
-    private static final String LOG_TAG = PlayerActivity.class.getSimpleName();
+    private static final String LOG_TAG = PlayerFragment.class.getSimpleName();
 
     // member variables
     private Context mContext;
@@ -63,6 +62,7 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     private SimpleExoPlayer mExoPlayer;
     private android.support.v4.media.session.MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
+    private DetailFragment.OnStepClickListener mCallback;
 
     // bind views using Butterknife library
     @BindView(R.id.tv_short_description) TextView mShortDescriptionTv;
@@ -72,22 +72,46 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     @BindView(R.id.iv_step_image) ImageView mThumbnailIv;
     @BindView(R.id.exo_player_view) SimpleExoPlayerView mExoPlayerView;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    // communication conduit between the host activity and this fragment
+    // triggered on the step button clicks
+    public interface OnStepClickListener {
+        void onStepSelected(Dessert dessert, int stepId);
+    }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player);
+    // required empty constructor
+    public PlayerFragment() {}
+
+    // cast check ensures that the host activity has implemented the callback interface
+    // Android calls onAttach() before onCreateView()
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // attempt to cast the activity context into the interface object
+        // as successful cast associates mCallback to the host activity
+        try {
+            mCallback = (DetailFragment.OnStepClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnStepClickListener");
+        }
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle bundle) {
+
+        // reference to activity context
+        mContext = getContext();
+
+        // extract the dessert and step ID from the passed bundle
+        mDessert = (Dessert) getArguments().getSerializable("selectedDessert");
+        mStepId = getArguments().getInt("selectedStepId");
+
+        // inflate the fragment
+        View rootView = inflater.inflate(R.layout.fragment_player, container, false);
 
         // initialize the Butterknife library
-        ButterKnife.bind(this);
-
-        // reference to application context
-        mContext = getApplicationContext();
-
-        // extract the Dessert and Step ID from the intent
-        Intent intent = getIntent();
-        mDessert = (Dessert) intent.getSerializableExtra("selectedDessert");
-        mStepId = (int) intent.getSerializableExtra("selectedStepId");
+        ButterKnife.bind(this, rootView);
 
         // get the full list of steps for this dessert, and the current step
         mSteps = mDessert.getSteps();
@@ -108,6 +132,8 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
         // load the step video into the UI using ExoPlayer
         setVideo();
 
+        // return the inflated view
+        return rootView;
     }
 
     // simple method to bind title textviews
@@ -171,11 +197,8 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
                     // stop the playing video
                     if (mExoPlayer != null) mExoPlayer.stop();
 
-                    // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
-                    Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
-                    intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
-                    intentToStartPlayerActivity.putExtra("selectedStepId", mStepId - 1);
-                    startActivity(intentToStartPlayerActivity);
+                    // call back into DetailActivity to restart this fragment with the previous step
+                    mCallback.onStepSelected(mDessert, mStepId - 1);
                 }
             });
         }
@@ -204,11 +227,8 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
                     // stop playing the video
                     if (mExoPlayer != null) mExoPlayer.stop();
 
-                    // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
-                    Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
-                    intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
-                    intentToStartPlayerActivity.putExtra("selectedStepId", mStepId + 1);
-                    startActivity(intentToStartPlayerActivity);
+                    // call back into DetailActivity to restart this fragment with the next step
+                    mCallback.onStepSelected(mDessert, mStepId + 1);
                 }
             });
         }
@@ -264,14 +284,14 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
             // instantiate the player using a default track selector and load control
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
-            mExoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector, loadControl);
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
 
             // associate the player to the player view
             mExoPlayerView.setPlayer(mExoPlayer);
 
             // prepare the media source using a default data source factory and extractors factory
-            String userAgent = Util.getUserAgent(this, "BakingRecipes");
-            DefaultDataSourceFactory sourceFactory = new DefaultDataSourceFactory(this, userAgent);
+            String userAgent = Util.getUserAgent(mContext, "BakingRecipes");
+            DefaultDataSourceFactory sourceFactory = new DefaultDataSourceFactory(mContext, userAgent);
             DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
             MediaSource mediaSource = new ExtractorMediaSource(videoUri, sourceFactory,
                     extractorsFactory, null, null);
@@ -293,19 +313,20 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     }
 
     // ensure that the back button returns the user to the DetailActivity
-    @Override
-    public void onBackPressed() {
+//    @Override
+//    public void onBackPressed() {
+//
+//        // bundle the Dessert into an explicit intent for DetailActivity
+//        Intent intentToStartDetailActivity = new Intent(mContext, DetailActivity.class);
+//        intentToStartDetailActivity.putExtra("selectedDessert", mDessert);
+//        startActivity(intentToStartDetailActivity);
+//    }
 
-        // bundle the Dessert into an explicit intent for DetailActivity
-        Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
-        intentToStartDetailActivity.putExtra("selectedDessert", mDessert);
-        startActivity(intentToStartDetailActivity);
-    }
 
     // release the ExoPlayer when the activity is destroyed
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
 
         // set media session to inactive
         mMediaSession.setActive(false);
@@ -322,7 +343,7 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     private void initializeMediaSession() {
 
         // initialize the session
-        mMediaSession = new MediaSessionCompat(this, "MediaSessionTAG");
+        mMediaSession = new MediaSessionCompat(mContext, "MediaSessionTAG");
 
         // enable callbacks for buttons and transport controls
         mMediaSession.setFlags(

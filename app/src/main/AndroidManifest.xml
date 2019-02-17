@@ -40,7 +40,7 @@
 
         <!-- player activity shows details of a given recipe step, and plays a video if available -->
         <activity
-            android:name=".PlayerActivity"
+            android:name=".PlayerFragment"
             android:label="Step Details" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
