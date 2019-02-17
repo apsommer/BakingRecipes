@@ -65,50 +65,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <ImageButton
-                android:id="@+id/ib_left_arrow"
+            <Button
+                android:id="@+id/b_left_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_effect"
-                android:src="@drawable/left_arrow"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="8dp"
-                />
-
-            <TextView
-                android:id="@+id/tv_previous_step"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/adamina"
-                android:textSize="12sp"
-                android:textColor="@color/gray"
-                android:background="@null"
+                android:drawableLeft="@drawable/left_arrow"
                 tools:text="Cut up carrots."
-                android:layout_toRightOf="@id/ib_left_arrow"
-                android:layout_centerVertical="true"
-                />
-
-            <TextView
-                android:id="@+id/tv_next_step"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textAllCaps="false"
                 android:fontFamily="@font/adamina"
                 android:textSize="12sp"
                 android:textColor="@color/gray"
-                android:background="@null"
-                tools:text="Kneed the bread."
-                android:layout_toLeftOf="@id/ib_right_arrow"
-                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
                 />
 
-            <ImageButton
-                android:id="@+id/ib_right_arrow"
+            <Button
+                android:id="@+id/b_right_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_effect"
-                android:src="@drawable/right_arrow"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:drawableRight="@drawable/right_arrow"
+                tools:text="Cut up carrots."
+                android:textAllCaps="false"
+                android:fontFamily="@font/adamina"
+                android:textSize="12sp"
+                android:textColor="@color/gray"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
                 />
 
         </RelativeLayout>

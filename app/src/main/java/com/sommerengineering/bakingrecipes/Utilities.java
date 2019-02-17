@@ -1,10 +1,14 @@
 package com.sommerengineering.bakingrecipes;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -187,5 +191,14 @@ public final class Utilities {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
         return Math.round(dp * displayMetrics.density);
+    }
+
+    //
+    public static RippleDrawable getButtonRipple(Context context) {
+
+        Drawable background = context.getResources().getDrawable(R.drawable.white);
+        int color = context.getResources().getColor(R.color.gray);
+        ColorStateList colorStateList = new ColorStateList(new int[][]{ new int[]{}}, new int[]{color});
+        return new RippleDrawable(colorStateList, background, null);
     }
 }

@@ -172,7 +172,7 @@ public class DetailActivity extends AppCompatActivity {
         return textView.getId();
     }
 
-    // creates a new ImageView with the given parameters and returns its position (ID)
+    // creates a new Button with the given parameters and returns its position (ID)
     private int createButton(ViewGroup container, String text, int position,
                              int drawable, final ArrayList<Step> steps, final int stepId) {
 
@@ -202,10 +202,8 @@ public class DetailActivity extends AppCompatActivity {
 
         // set the drawable and ripple effect on button press
         button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
-        Drawable background = getResources().getDrawable(R.drawable.white);
-        int color = getResources().getColor(R.color.gray);
-        ColorStateList colorStateList = new ColorStateList(new int[][]{ new int[]{}}, new int[]{color});
-        RippleDrawable rippleDrawable = new RippleDrawable(colorStateList, background, null);
+
+        RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
         button.setBackground(rippleDrawable);
 
         // set a click listener who's click starts PlayerActivity

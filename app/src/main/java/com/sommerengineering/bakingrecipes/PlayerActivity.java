@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -60,10 +62,8 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     // bind views using Butterknife library
     @BindView(R.id.tv_short_description) TextView mShortDescriptionTv;
     @BindView(R.id.tv_description) TextView mDescriptionTv;
-    @BindView(R.id.ib_left_arrow) ImageButton mLeftArrowIb;
-    @BindView(R.id.tv_previous_step) TextView mPreviousStepTv;
-    @BindView(R.id.ib_right_arrow) ImageButton mRightArrowIb;
-    @BindView(R.id.tv_next_step) TextView mNextStepTv;
+    @BindView(R.id.b_left_arrow) Button mLeftArrowB;
+    @BindView(R.id.b_right_arrow) Button mRightArrowB;
     @BindView(R.id.iv_step_image) ImageView mThumbnailIv;
     @BindView(R.id.exo_player_view) SimpleExoPlayerView mExoPlayerView;
 
@@ -117,68 +117,49 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
         mDescriptionTv.setText(description);
     }
 
-    // determine where this step is in the list and set member variables and UI components accordingly
+    // determine where this step is in the list and set member variables
     private void setPreviousAndNextSteps() {
 
-        // check if this is the first step
+        // the first step has no previous step
         if (mStepId == 0) {
-
-            // hide the left arrow button and previous step short description
-            mLeftArrowIb.setVisibility(View.GONE);
-            mPreviousStepTv.setVisibility(View.GONE);
             mPreviousStep = null;
-
-            // get the next step and its short description
             mNextStep = mSteps.get(mStepId + 1);
-            String nextStepShortDescription = mNextStep.getShortDescription();
-
-            // set the text in the textview next to the right arrow
-            mNextStepTv.setText(nextStepShortDescription);
         }
 
-        // check that this step is in the middle of the list
+        // a step in the middle of the list has both previous and next steps
         else if (mStepId > 0 && mStepId < mSteps.size() - 1) {
-
-            // get the previous step and its short description
             mPreviousStep = mSteps.get(mStepId - 1);
-            String previousStepShortDescription = mPreviousStep.getShortDescription();
-
-            // set the text in the textview next to the left arrow
-            mPreviousStepTv.setText(previousStepShortDescription);
-
-            // get the next step and its short description
             mNextStep = mSteps.get(mStepId + 1);
-            String nextStepShortDescription = mNextStep.getShortDescription();
-
-            // set the text in the textview next to the right arrow
-            mNextStepTv.setText(nextStepShortDescription);
         }
 
-        // check if this is the last step
+        // the last step has no next step
         else if (mStepId == mSteps.size() - 1) {
-
-            // hide the right arrow button and next step short description
-            mRightArrowIb.setVisibility(View.GONE);
-            mNextStepTv.setVisibility(View.GONE);
-            mNextStep = null;
-
-            // get the previous step and its short description
             mPreviousStep = mSteps.get(mStepId - 1);
-            String previousStepShortDescription = mPreviousStep.getShortDescription();
-
-            // set the text in the textview next to the left arrow
-            mPreviousStepTv.setText(previousStepShortDescription);
+            mNextStep = null;
         }
     }
 
     // load the left and right arrows to restart this activity with a new step
     private void setNavigationArrows() {
 
-        // if a previous step exists then put a click listener on the left arrow
-        if (mPreviousStep != null) {
+        // if there is no previous step then hide the navigation button
+        if (mPreviousStep == null) {
+            mLeftArrowB.setVisibility(View.GONE);
+        }
 
-            // restart this activity with the new step
-            mLeftArrowIb.setOnClickListener(new View.OnClickListener() {
+        // set the previous button text and add a click listener to restart this activity
+        else {
+
+            // previous step button text
+            String previousStepShortDescription = mPreviousStep.getShortDescription();
+            mLeftArrowB.setText(previousStepShortDescription);
+
+            // add ripple effect on button press
+            RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
+            mLeftArrowB.setBackground(rippleDrawable);
+
+            // on the click restart this activity with the new step
+            mLeftArrowB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -194,11 +175,24 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
             });
         }
 
-        // if a next step exists then put a click listener on the right arrow
-        if (mNextStep != null) {
+        // if there is no next step then hide the navigation button
+        if (mNextStep == null) {
+            mRightArrowB.setVisibility(View.GONE);
+        }
 
-            // restart this activity with the new step
-            mRightArrowIb.setOnClickListener(new View.OnClickListener() {
+        // set the next button text and add a click listener to restart this activity
+        else {
+
+            // next step button text
+            String nextStepShortDescription = mNextStep.getShortDescription();
+            mRightArrowB.setText(nextStepShortDescription);
+
+            // add ripple effect on button press
+            RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
+            mRightArrowB.setBackground(rippleDrawable);
+
+            // on the click restart this activity with the new step
+            mRightArrowB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
