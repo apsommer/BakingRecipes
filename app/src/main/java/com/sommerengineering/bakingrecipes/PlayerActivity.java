@@ -39,6 +39,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -58,6 +61,8 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     private Step mPreviousStep;
     private Step mNextStep;
     private SimpleExoPlayer mExoPlayer;
+    private android.support.v4.media.session.MediaSessionCompat mMediaSession;
+    private PlaybackStateCompat.Builder mStateBuilder;
 
     // bind views using Butterknife library
     @BindView(R.id.tv_short_description) TextView mShortDescriptionTv;
@@ -234,12 +239,13 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
         }
     }
 
-    //
+    // play video using ExoPlayer
     private void setVideo() {
 
         // extract the video URL from the current step
         String videoPath = mStep.getVideoPath();
 
+        // if there is no video then hide the player and return
         if (videoPath == null || videoPath.isEmpty()) {
             mExoPlayerView.setVisibility(View.GONE);
             return;
@@ -251,9 +257,9 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
         // check that the URI is valid
         if (videoUri != null) {
 
-            // set the default artwork while the player loads, also shown if no video exists
+            // set the default artwork while the player loads
             mExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
-                    getResources(), R.drawable.video_placeholder));
+                    getResources(), R.drawable.white));
 
             // instantiate the player using a default track selector and load control
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -280,6 +286,9 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
             mExoPlayer.prepare(mediaSource);
             mExoPlayer.setPlayWhenReady(true);
 
+            // initialize a media session to give external clients (ex. headphones) control of the player
+            initializeMediaSession();
+
         }
     }
 
@@ -298,6 +307,9 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     protected void onDestroy() {
         super.onDestroy();
 
+        // set media session to inactive
+        mMediaSession.setActive(false);
+
         // if a video is playing then stop and release it
         if (mExoPlayer != null) {
             mExoPlayer.stop();
@@ -306,7 +318,36 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
         }
     }
 
-    // six ExoPlayer.EventListener methods simply output a log message
+    // a media session gives external clients (ex. headphones) control of the player
+    private void initializeMediaSession() {
+
+        // initialize the session
+        mMediaSession = new MediaSessionCompat(this, "MediaSessionTAG");
+
+        // enable callbacks for buttons and transport controls
+        mMediaSession.setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        // do not allow external media buttons to restart the player when the app is not visible
+        mMediaSession.setMediaButtonReceiver(null);
+
+        // build an initial playback state so media buttons can start the player
+        mStateBuilder = new PlaybackStateCompat.Builder().setActions(
+                PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE |
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_PLAY_PAUSE);
+
+        // set the session playback state
+        mMediaSession.setPlaybackState(mStateBuilder.build());
+
+        // set the callbacks to the inner class
+        mMediaSession.setCallback(new StepMediaSessionCallback());
+
+        // start the session in this active activity
+        mMediaSession.setActive(true);
+    }
+
+    // six ExoPlayer event listener methods
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest) {
         Log.e(LOG_TAG, "onTimelineChanged");
@@ -322,12 +363,21 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     @Override
     public void onPlayerStateChanged(boolean isPlaying, int playbackState) {
 
-        Log.e(LOG_TAG, "onPlayerStateChanged");
-
         if (isPlaying && playbackState == ExoPlayer.STATE_READY) {
+
             Log.e(LOG_TAG, "onPlayerStateChanged: playing");
+
+            // update the playback state
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+                    mExoPlayer.getCurrentPosition(), 1f);
+
         } else if (playbackState == ExoPlayer.STATE_READY) {
+
             Log.e(LOG_TAG, "onPlayerStateChanged: paused");
+
+            // update the playback state
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayer.getCurrentPosition(), 1f);
         }
     }
     @Override
@@ -337,5 +387,24 @@ public class PlayerActivity extends AppCompatActivity implements ExoPlayer.Event
     @Override
     public void onPositionDiscontinuity() {
         Log.e(LOG_TAG, "onPositionDiscontinuity");
+    }
+
+    // callbacks for external clients controlling the player
+    private class StepMediaSessionCallback extends MediaSessionCompat.Callback {
+
+        @Override
+        public void onPlay() {
+            mExoPlayer.setPlayWhenReady(true);
+        }
+
+        @Override
+        public void onPause() {
+            mExoPlayer.setPlayWhenReady(false);
+        }
+
+        @Override
+        public void onSkipToPrevious() {
+            mExoPlayer.seekTo(0);
+        }
     }
 }

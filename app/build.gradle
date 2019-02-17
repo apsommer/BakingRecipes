@@ -43,4 +43,5 @@ dependencies {
 
     // ExoPlayer media controller and media player library
     implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    implementation 'com.android.support:support-v4:28.0.0'
 }
