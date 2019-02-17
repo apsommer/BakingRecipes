@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements DetailFragment.OnStepClickListener {
 
     // simple tag for log messages
     private static final String LOG_TAG = DetailActivity.class.getSimpleName();
@@ -50,6 +50,16 @@ public class DetailActivity extends AppCompatActivity {
         // create the DetailFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.detail_container, detailFragment).commit();
+    }
+
+    @Override
+    public void onStepSelected(Dessert dessert, int stepId) {
+
+        // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
+        Intent intentToStartPlayerActivity = new Intent(this, PlayerActivity.class);
+        intentToStartPlayerActivity.putExtra("selectedDessert", dessert);
+        intentToStartPlayerActivity.putExtra("selectedStepId", stepId);
+        startActivity(intentToStartPlayerActivity);
     }
 
     // ensure that the back button returns the user to the MainActivity

@@ -29,9 +29,7 @@ public class DetailFragment extends Fragment {
     // member variables
     private Context mContext;
     private Dessert mDessert;
-
-    // empty constructor
-    public DetailFragment() {}
+    private OnStepClickListener mCallback;
 
     // bind views using Butterknife library
     @BindView(R.id.tv_name) TextView mNameTv;
@@ -39,23 +37,40 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.rl_ingredients_container) RelativeLayout mIngredientsContainer;
     @BindView(R.id.rl_steps_container) RelativeLayout mStepsContainer;
 
+    // communication conduit between the host activity and this fragment
+    // triggered on the step button clicks
+    public interface OnStepClickListener {
+        void onStepSelected(Dessert dessert, int stepId);
+    }
+
+    // required empty constructor
+    public DetailFragment() {}
+
+    // cast check ensures that the host activity has implemented the callback interface
+    // Android calls onAttach() before onCreateView()
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        // reference to activity context
-        mContext = getContext();
-        
-        // extract the dessert from the passed bundle
-        Bundle bundle = this.getArguments();
-        mDessert = (Dessert) bundle.getSerializable("selectedDessert");
-
+        // attempt to cast the activity context into the interface object
+        // as successful cast associates mCallback to the host activity
+        try {
+            mCallback = (OnStepClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnStepClickListener");
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle bundle) {
+
+        // reference to activity context
+        mContext = getContext();
+
+        // extract the dessert from the passed bundle
+        mDessert = (Dessert) getArguments().getSerializable("selectedDessert");
 
         // inflate the fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
@@ -221,12 +236,7 @@ public class DetailFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // bundle the selected Dessert and the step ID into an explicit intent for PlayerActivity
-                Intent intentToStartPlayerActivity = new Intent(mContext, PlayerActivity.class);
-                intentToStartPlayerActivity.putExtra("selectedDessert", mDessert);
-                intentToStartPlayerActivity.putExtra("selectedStepId", stepId);
-                startActivity(intentToStartPlayerActivity);
+                mCallback.onStepSelected(mDessert, stepId);
             }
         });
 
