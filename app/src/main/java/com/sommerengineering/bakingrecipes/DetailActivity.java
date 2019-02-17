@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -191,6 +192,7 @@ public class DetailActivity extends AppCompatActivity {
         button.setId(View.generateViewId());
 
         // set text attributes
+        button.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         button.setText(text);
         button.setTextColor(getResources().getColor(R.color.black));
         button.setAllCaps(false);

@@ -19,12 +19,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/adamina"
+            android:gravity="center"
             android:textSize="32sp"
             android:textColor="@android:color/black"
             android:background="@null"
             tools:text="Preheat the oven."
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             />
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
