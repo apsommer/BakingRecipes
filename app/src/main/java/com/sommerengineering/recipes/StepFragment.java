@@ -101,7 +101,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         mStepId = getArguments().getInt("selectedStepId");
 
         // inflate the fragment
-        View rootView = inflater.inflate(R.layout.fragment_player, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
         // initialize the Butterknife library
         ButterKnife.bind(this, rootView);

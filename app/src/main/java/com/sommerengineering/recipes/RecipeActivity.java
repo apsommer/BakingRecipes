@@ -16,7 +16,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // inflate the fragment container
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_recipe);
 
         // extract dessert from the main activity intent
         Intent intent = getIntent();
@@ -32,7 +32,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // create the DetailFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.detail_container, detailFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.recipe_container, detailFragment).commit();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // create the StepFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.detail_container, playerFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.recipe_container, playerFragment).commit();
 
     }
 
