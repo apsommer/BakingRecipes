@@ -1,4 +1,4 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import org.junit.Test;
 

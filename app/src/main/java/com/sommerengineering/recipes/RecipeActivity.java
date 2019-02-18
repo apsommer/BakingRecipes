@@ -1,4 +1,4 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,10 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
-public class DetailActivity extends AppCompatActivity implements DetailFragment.OnStepClickListener {
+public class RecipeActivity extends AppCompatActivity implements DetailFragment.OnStepClickListener {
 
     // simple tag for log messages
-    private static final String LOG_TAG = DetailActivity.class.getSimpleName();
+    private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,22 +38,16 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
     @Override
     public void onStepSelected(Dessert dessert, int stepId) {
 
-        // bundle the selected Dessert and the step ID into an explicit intent for PlayerFragment
-//        Intent intentToStartPlayerActivity = new Intent(this, PlayerFragment.class);
-//        intentToStartPlayerActivity.putExtra("selectedDessert", dessert);
-//        intentToStartPlayerActivity.putExtra("selectedStepId", stepId);
-//        startActivity(intentToStartPlayerActivity);
-
-        //
+        // bundle the selected dessert and the step ID for a StepFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable("selectedDessert", dessert);
         bundle.putInt("selectedStepId", stepId);
 
-        //
-        PlayerFragment playerFragment = new PlayerFragment();
+        // instantiate a new StepFragment  and add the bundle
+        StepFragment playerFragment = new StepFragment();
         playerFragment.setArguments(bundle);
 
-        // create the DetailFragment
+        // create the StepFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().add(R.id.detail_container, playerFragment).commit();
 
@@ -62,6 +56,7 @@ public class DetailActivity extends AppCompatActivity implements DetailFragment.
     // ensure that the back button returns the user to the MainActivity
     @Override
     public void onBackPressed() {
+        finish();
         Intent intentToStartMainActivity = new Intent(this, MainActivity.class);
         startActivity(intentToStartMainActivity);
     }

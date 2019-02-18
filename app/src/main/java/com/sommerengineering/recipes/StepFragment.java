@@ -1,7 +1,6 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
@@ -46,10 +45,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlayerFragment extends Fragment implements ExoPlayer.EventListener {
+public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     // simple tag for log messages
-    private static final String LOG_TAG = PlayerFragment.class.getSimpleName();
+    private static final String LOG_TAG = StepFragment.class.getSimpleName();
 
     // member variables
     private Context mContext;
@@ -72,14 +71,8 @@ public class PlayerFragment extends Fragment implements ExoPlayer.EventListener 
     @BindView(R.id.iv_step_image) ImageView mThumbnailIv;
     @BindView(R.id.exo_player_view) SimpleExoPlayerView mExoPlayerView;
 
-    // communication conduit between the host activity and this fragment
-    // triggered on the step button clicks
-    public interface OnStepClickListener {
-        void onStepSelected(Dessert dessert, int stepId);
-    }
-
     // required empty constructor
-    public PlayerFragment() {}
+    public StepFragment() {}
 
     // cast check ensures that the host activity has implemented the callback interface
     // Android calls onAttach() before onCreateView()
@@ -197,7 +190,7 @@ public class PlayerFragment extends Fragment implements ExoPlayer.EventListener 
                     // stop the playing video
                     if (mExoPlayer != null) mExoPlayer.stop();
 
-                    // call back into DetailActivity to restart this fragment with the previous step
+                    // call back into RecipeActivity to restart this fragment with the previous step
                     mCallback.onStepSelected(mDessert, mStepId - 1);
                 }
             });
@@ -227,7 +220,7 @@ public class PlayerFragment extends Fragment implements ExoPlayer.EventListener 
                     // stop playing the video
                     if (mExoPlayer != null) mExoPlayer.stop();
 
-                    // call back into DetailActivity to restart this fragment with the next step
+                    // call back into RecipeActivity to restart this fragment with the next step
                     mCallback.onStepSelected(mDessert, mStepId + 1);
                 }
             });
@@ -311,17 +304,6 @@ public class PlayerFragment extends Fragment implements ExoPlayer.EventListener 
 
         }
     }
-
-    // ensure that the back button returns the user to the DetailActivity
-//    @Override
-//    public void onBackPressed() {
-//
-//        // bundle the Dessert into an explicit intent for DetailActivity
-//        Intent intentToStartDetailActivity = new Intent(mContext, DetailActivity.class);
-//        intentToStartDetailActivity.putExtra("selectedDessert", mDessert);
-//        startActivity(intentToStartDetailActivity);
-//    }
-
 
     // release the ExoPlayer when the activity is destroyed
     @Override

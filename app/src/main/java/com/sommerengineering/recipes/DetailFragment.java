@@ -1,7 +1,6 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
@@ -233,8 +232,8 @@ public class DetailFragment extends Fragment {
         RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
         button.setBackground(rippleDrawable);
 
-        // set a click listener who's click calls back into DetailActivity
-        // and starts PlayerFragment with the selected Dessert and the step ID
+        // set a click listener who's click calls back into RecipeActivity
+        // and starts StepFragment with the selected Dessert and the step ID
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

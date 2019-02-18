@@ -1,14 +1,11 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
-import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONException;

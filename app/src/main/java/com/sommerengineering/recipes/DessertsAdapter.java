@@ -1,4 +1,4 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

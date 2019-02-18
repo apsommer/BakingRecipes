@@ -1,4 +1,4 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onRecyclerItemClick(Dessert dessert) {
 
-        // bundle the Dessert into an explicit intent for DetailActivity
-        Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
+        // bundle the Dessert into an explicit intent for RecipeActivity
+        Intent intentToStartDetailActivity = new Intent(this, RecipeActivity.class);
         intentToStartDetailActivity.putExtra("selectedDessert", dessert);
         startActivity(intentToStartDetailActivity);
     }

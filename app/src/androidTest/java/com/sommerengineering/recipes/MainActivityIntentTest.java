@@ -1,4 +1,4 @@
-package com.sommerengineering.bakingrecipes;
+package com.sommerengineering.recipes;
 
 import static android.app.Instrumentation.ActivityResult;
 import static android.support.test.espresso.Espresso.onView;
@@ -36,10 +36,10 @@ public class MainActivityIntentTest {
                 new ActivityResult(Activity.RESULT_OK, null));
     }
 
-    // test that clicking on a recycler item generates an Intent for the DetailActivity
+    // test that clicking on a recycler item generates an Intent for the RecipeActivity
     @Test
     public void clickNextArrow_SendsIntentForPlayerActivity() {
         onView(withId(R.id.rv_recycler)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        intended(hasComponent(DetailActivity.class.getName()));
+        intended(hasComponent(RecipeActivity.class.getName()));
     }
 }
