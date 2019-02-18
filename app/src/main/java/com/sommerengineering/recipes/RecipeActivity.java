@@ -49,7 +49,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // create the StepFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(R.id.detail_container, playerFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.detail_container, playerFragment).commit();
 
     }
 

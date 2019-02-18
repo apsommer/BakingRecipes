@@ -187,8 +187,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 @Override
                 public void onClick(View view) {
 
-                    // stop the playing video
-                    if (mExoPlayer != null) mExoPlayer.stop();
+                    // stop and release the player and media session
+                    releasePlayer();
 
                     // call back into RecipeActivity to restart this fragment with the previous step
                     mCallback.onStepSelected(mDessert, mStepId - 1);
@@ -217,8 +217,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 @Override
                 public void onClick(View view) {
 
-                    // stop playing the video
-                    if (mExoPlayer != null) mExoPlayer.stop();
+                    // stop and release the player and media session
+                    releasePlayer();
 
                     // call back into RecipeActivity to restart this fragment with the next step
                     mCallback.onStepSelected(mDessert, mStepId + 1);
@@ -305,15 +305,24 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
     }
 
-    // release the ExoPlayer when the activity is destroyed
+    // release the ExoPlayer and media session when the activity is destroyed
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        // set media session to inactive
-        mMediaSession.setActive(false);
+        // stop and release the player and media session
+        releasePlayer();
+    }
 
-        // if a video is playing then stop and release it
+    // if a video is playing then stop and release it
+    public void releasePlayer() {
+
+        // set media session to inactive
+        if (mMediaSession != null) {
+            mMediaSession.setActive(false);
+        }
+
+        // stop and release the player
         if (mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();
