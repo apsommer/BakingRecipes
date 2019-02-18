@@ -10,8 +10,8 @@
 
     <!-- fragment_recipe -->
     <FrameLayout
-        android:id="@+id/recipe_container"
-        android:layout_width="400dp"
+        android:id="@+id/fl_detail_container"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         />
 
@@ -23,7 +23,7 @@
 
     <!-- fragment_step -->
     <FrameLayout
-        android:id="@+id/step_container"
+        android:id="@+id/fl_step_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
