@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements
         // notifying the system of this allows for performance improvements
         mRecycler.hasFixedSize();
 
-        // initialize the adapter with a blank list and bind it to the recycler
+        // initialize the adapter with a widget_provider list and bind it to the recycler
         if (mAdapter == null) {
             ArrayList<Dessert> desserts = new ArrayList<>();
             mAdapter = new DessertsAdapter(mContext, desserts, this);

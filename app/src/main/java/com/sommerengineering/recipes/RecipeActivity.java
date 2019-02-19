@@ -106,9 +106,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
     // control navigation
     @Override
     public void onBackPressed() {
+
+        // end activity
         finish();
 
-        // coming from the step activity on a single pane layout
+        // the user is coming from the step activity on a single pane layout
         if (!mIsTwoPane && mIsComingFromStep) {
 
             // bundle the Dessert into an explicit intent for RecipeActivity
@@ -122,6 +124,6 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
             Intent intentToStartMainActivity = new Intent(this, MainActivity.class);
             startActivity(intentToStartMainActivity);
         }
-        
+
     }
 }
