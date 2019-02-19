@@ -22,19 +22,12 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
     // flag for two-pane UI (tablet) or single pane UI (phone)
     private boolean mIsTwoPane;
 
-    // bind views using Butterknife library
-    @BindView(R.id.fl_detail_container) FrameLayout mRecipeContainer;
-    @BindView(R.id.fl_step_container) FrameLayout mStepContainer;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         // inflate the fragment container
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-
-        // initialize the Butterknife library
-        ButterKnife.bind(this);
 
         // extract dessert from the main activity intent
         Intent intent = getIntent();
@@ -52,7 +45,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // single pane layout
-        if (mRecipeContainer == null) {
+        if (findViewById(R.id.fl_detail_container) == null) {
 
             // set flag
             mIsTwoPane = false;
@@ -75,7 +68,8 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
                     dpWidth/3, ViewGroup.LayoutParams.MATCH_PARENT);
 
             // bind these layout parameters to the framelayout
-            mRecipeContainer.setLayoutParams(layoutParams);
+            FrameLayout recipeContainer = findViewById(R.id.fl_detail_container);
+            recipeContainer.setLayoutParams(layoutParams);
 
             // create the recipe fragment showing ingredients and step metadata
             fragmentManager.beginTransaction().add(R.id.fl_detail_container, detailFragment).commit();
