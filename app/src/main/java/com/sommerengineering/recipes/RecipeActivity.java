@@ -5,14 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class RecipeActivity extends AppCompatActivity implements DetailFragment.OnStepClickListener {
 
@@ -45,13 +40,13 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // single pane layout
-        if (findViewById(R.id.fl_detail_container) == null) {
+        if (findViewById(R.id.fl_detail_fragment_container) == null) {
 
             // set flag
             mIsTwoPane = false;
 
             // create the detail fragment showing ingredients and step metadata
-            fragmentManager.beginTransaction().add(R.id.fl_detail_and_step_container, detailFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.fl_fragment_container, detailFragment).commit();
 
         // two-pane layout
         } else {
@@ -68,11 +63,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
                     dpWidth/3, ViewGroup.LayoutParams.MATCH_PARENT);
 
             // bind these layout parameters to the framelayout
-            FrameLayout recipeContainer = findViewById(R.id.fl_detail_container);
+            FrameLayout recipeContainer = findViewById(R.id.fl_detail_fragment_container);
             recipeContainer.setLayoutParams(layoutParams);
 
             // create the recipe fragment showing ingredients and step metadata
-            fragmentManager.beginTransaction().add(R.id.fl_detail_container, detailFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.fl_detail_fragment_container, detailFragment).commit();
         }
 
     }
@@ -94,11 +89,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // single pane layout: step fragment replaces the recipe fragment
         if (!mIsTwoPane) {
-            fragmentManager.beginTransaction().replace(R.id.fl_detail_and_step_container, stepFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fl_fragment_container, stepFragment).commit();
 
         // two-pane layout: recipe fragment and step fragment shown simultaneously
         } else {
-            fragmentManager.beginTransaction().replace(R.id.fl_step_container, stepFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fl_step_fragment_container, stepFragment).commit();
         }
 
     }

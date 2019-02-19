@@ -142,15 +142,8 @@ public class DetailFragment extends Fragment {
             // concatenate id and shortDescription for button
             final String buttonText = " " + id + ". " + shortDescription + " ";
 
-            // if an image or video exists for this step create a button for it
-            if (!videoPath.isEmpty() || !thumbnailPath.isEmpty()) {
-                position = createButton(mStepsContainer, buttonText, position, R.drawable.play, steps, i);
-
-                // else create a simple textview
-            } else {
-                position = createTextView(mStepsContainer, buttonText, position,
-                        18, "BELOW", 20, R.color.black);
-            }
+            // create a button for this step; the position of the new view is returned
+            position = createButton(mStepsContainer, buttonText, position, R.drawable.play, steps, i);
         }
     }
 
@@ -165,7 +158,7 @@ public class DetailFragment extends Fragment {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        // set padding
+        // set margins
         int marginPx = Utilities.dpToPx(mContext, margin);
         layoutParams.setMargins(0, marginPx, 0, marginPx);
 
@@ -206,7 +199,7 @@ public class DetailFragment extends Fragment {
 
         // layout size and position are defined in LayoutParams
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.addRule(RelativeLayout.BELOW, position);
 
         // bind these layout parameters to the button
@@ -228,9 +221,12 @@ public class DetailFragment extends Fragment {
 
         // set the drawable and ripple effect on button press
         button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
-
         RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
         button.setBackground(rippleDrawable);
+
+        // set padding
+        int paddingPx = Utilities.dpToPx(mContext, getResources().getDimension(R.dimen.detail_spacing)) / 2;
+        button.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
 
         // set a click listener who's click calls back into RecipeActivity
         // and starts StepFragment with the selected Dessert and the step ID
