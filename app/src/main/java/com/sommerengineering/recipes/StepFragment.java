@@ -70,6 +70,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     @BindView(R.id.b_right_arrow) Button mRightArrowB;
     @BindView(R.id.iv_step_image) ImageView mThumbnailIv;
     @BindView(R.id.exo_player_view) SimpleExoPlayerView mExoPlayerView;
+    @BindView(R.id.iv_no_video_image) ImageView mNoVideoIv;
 
     // required empty constructor
     public StepFragment() {}
@@ -233,7 +234,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         // extract image URL from current step
         String thumbnailPath = mStep.getThumbnailPath();
 
-        // Udacity deliberately put the video URL into the image URL JSON key for
+        // assume Udacity deliberately put the video URL into the image URL JSON key for
         // Nutella Pie > Step 5 ... catch this error here by swapping the attributes
         if (thumbnailPath.contains(".mp4")) {
             mStep.setThumbnailPath(null);
@@ -258,9 +259,9 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         // extract the video URL from the current step
         String videoPath = mStep.getVideoPath();
 
-        // if there is no video then hide the player and return
+        // if there is no video then display the app icon as a placeholder and return
         if (videoPath == null || videoPath.isEmpty()) {
-            mExoPlayerView.setVisibility(View.GONE);
+            mNoVideoIv.setVisibility(View.VISIBLE);
             return;
         }
 
@@ -269,10 +270,6 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
         // check that the URI is valid
         if (videoUri != null) {
-
-            // set the default artwork while the player loads
-            mExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(
-                    getResources(), R.drawable.white));
 
             // instantiate the player using a default track selector and load control
             TrackSelector trackSelector = new DefaultTrackSelector();
@@ -301,7 +298,6 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
             // initialize a media session to give external clients (ex. headphones) control of the player
             initializeMediaSession();
-
         }
     }
 

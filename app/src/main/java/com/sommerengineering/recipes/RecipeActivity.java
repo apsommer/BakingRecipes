@@ -1,5 +1,6 @@
 package com.sommerengineering.recipes;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,9 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
     // flag for two-pane UI (tablet) or single pane UI (phone)
     private boolean mIsTwoPane;
 
+    Dessert mDessert;
+    boolean mIsComingFromStep;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -26,11 +30,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // extract dessert from the main activity intent
         Intent intent = getIntent();
-        Dessert dessert = (Dessert) intent.getSerializableExtra("selectedDessert");
+        mDessert = (Dessert) intent.getSerializableExtra("selectedDessert");
 
         // put dessert into a bundle
         Bundle bundle = new Bundle();
-        bundle.putSerializable("selectedDessert", dessert);
+        bundle.putSerializable("selectedDessert", mDessert);
 
         // instantiate a new DetailFragment and add the bundle
         DetailFragment detailFragment = new DetailFragment();
@@ -41,8 +45,6 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // single pane layout
         if (findViewById(R.id.fl_detail_fragment_container) == null) {
-
-            // set flag
             mIsTwoPane = false;
 
             // create the detail fragment showing ingredients and step metadata
@@ -50,17 +52,15 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // two-pane layout
         } else {
-
-            // set flag
             mIsTwoPane = true;
 
-            // detail fragment always occupies 1/3 of screen width
             // get current device width in dp
             int dpWidth = getResources().getDisplayMetrics().widthPixels;
+            int screenColumns = 3; // split screen into 3 sections
 
             // layout size and position are defined in LayoutParams
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    dpWidth/3, ViewGroup.LayoutParams.MATCH_PARENT);
+                    dpWidth / screenColumns, ViewGroup.LayoutParams.MATCH_PARENT);
 
             // bind these layout parameters to the framelayout
             FrameLayout recipeContainer = findViewById(R.id.fl_detail_fragment_container);
@@ -69,6 +69,9 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
             // create the recipe fragment showing ingredients and step metadata
             fragmentManager.beginTransaction().add(R.id.fl_detail_fragment_container, detailFragment).commit();
         }
+
+        //
+
 
     }
 
@@ -80,9 +83,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         bundle.putSerializable("selectedDessert", dessert);
         bundle.putInt("selectedStepId", stepId);
 
-        // instantiate a new StepFragment  and add the bundle
+        // instantiate a new StepFragment and add the bundle
         StepFragment stepFragment = new StepFragment();
         stepFragment.setArguments(bundle);
+
+        mIsComingFromStep = true;
 
         // get reference to the Android fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -98,11 +103,25 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
     }
 
-    // ensure that the back button returns the user to the MainActivity
+    // control navigation
     @Override
     public void onBackPressed() {
         finish();
-        Intent intentToStartMainActivity = new Intent(this, MainActivity.class);
-        startActivity(intentToStartMainActivity);
+
+        // coming from the step activity on a single pane layout
+        if (!mIsTwoPane && mIsComingFromStep) {
+
+            // bundle the Dessert into an explicit intent for RecipeActivity
+            Intent intentToStartRecipeActivity = new Intent(this, RecipeActivity.class);
+            intentToStartRecipeActivity.putExtra("selectedDessert", mDessert);
+            startActivity(intentToStartRecipeActivity);
+        }
+
+        // start MainActivity
+        else {
+            Intent intentToStartMainActivity = new Intent(this, MainActivity.class);
+            startActivity(intentToStartMainActivity);
+        }
+        
     }
 }

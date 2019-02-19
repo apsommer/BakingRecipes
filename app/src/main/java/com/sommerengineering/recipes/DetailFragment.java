@@ -1,13 +1,17 @@
 package com.sommerengineering.recipes;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
+import android.view.DragAndDropPermissions;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,8 +146,15 @@ public class DetailFragment extends Fragment {
             // concatenate id and shortDescription for button
             final String buttonText = " " + id + ". " + shortDescription + " ";
 
+            // presence of a video file affects the button color
+            int buttonDrawable;
+            if (videoPath != null && !videoPath.isEmpty()) {
+                buttonDrawable = R.drawable.play;
+            } else {
+                buttonDrawable = R.drawable.play_gray;
+            }
             // create a button for this step; the position of the new view is returned
-            position = createButton(mStepsContainer, buttonText, position, R.drawable.play, steps, i);
+            position = createButton(mStepsContainer, buttonText, position, buttonDrawable, steps, i);
         }
     }
 
@@ -192,7 +203,7 @@ public class DetailFragment extends Fragment {
 
     // creates a new Button with the given parameters and returns its position (ID)
     private int createButton(ViewGroup container, String text, int position,
-                             int drawable, final ArrayList<Step> steps, final int stepId) {
+                             int drawableId, final ArrayList<Step> steps, final int stepId) {
 
         // new Button
         Button button = new Button(mContext);
@@ -219,8 +230,17 @@ public class DetailFragment extends Fragment {
         Typeface font = Typeface.createFromAsset(mContext.getAssets(), "adamina.ttf");
         button.setTypeface(font);
 
+        // define drawable size in dp
+        int buttonDimenPx = Utilities.dpToPx(mContext, 45);
+
+        // convert drawable to a scaled bitmap
+        Drawable drawable = getResources().getDrawable(drawableId);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        bitmap = Bitmap.createScaledBitmap(bitmap, buttonDimenPx, buttonDimenPx, true);
+        drawable = new BitmapDrawable(getResources(), bitmap);
+
         // set the drawable and ripple effect on button press
-        button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(drawable), null, null, null);
+        button.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         RippleDrawable rippleDrawable = Utilities.getButtonRipple(mContext);
         button.setBackground(rippleDrawable);
 
