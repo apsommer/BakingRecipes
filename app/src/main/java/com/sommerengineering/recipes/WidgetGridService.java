@@ -3,11 +3,7 @@ package com.sommerengineering.recipes;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.Loader;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -27,8 +23,7 @@ public class WidgetGridService extends RemoteViewsService {
     }
 
     //
-    public class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory,
-            Loader.OnLoadCompleteListener<ArrayList<Dessert>> {
+    public class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         private static final int LOADER_ID = 0;
 
@@ -51,13 +46,6 @@ public class WidgetGridService extends RemoteViewsService {
 
         }
 
-        @Override
-        public void onLoadComplete(@NonNull Loader<ArrayList<Dessert>> loader, @Nullable ArrayList<Dessert> desserts) {
-
-            Log.e(LOG_TAG, "~~ onLoadComplete");
-//            mDesserts = desserts;
-        }
-
         // restart loader to refresh the desserts list
         @Override
         public void onDataSetChanged() {
@@ -72,15 +60,6 @@ public class WidgetGridService extends RemoteViewsService {
 
             // extract Dessert objects from the JSON payload
             mDesserts = Utilities.extractDessertsFromJson(responseJson);
-
-//            // initialize the Loader
-//            mLoader = new DessertsLoader(mContext, url);
-//
-//            // this class has the listener callbacks
-//            mLoader.registerListener(LOADER_ID, this);
-//
-//            // loaders automatically retrieve data on a background thread
-//            mLoader.startLoading();
 
         }
 
@@ -109,8 +88,8 @@ public class WidgetGridService extends RemoteViewsService {
 
             // add the dessert to a bundle
             Bundle bundle = new Bundle();
-            bundle.putInt(WidgetProvider.EXTRA_ITEM, position);
-            bundle.putSerializable("selectedDessert", dessert);
+            bundle.putInt(WidgetProvider.WIDGET_ID, position);
+            bundle.putInt(WidgetProvider.DESSERT_ID, dessert.getId());
 
             // put the bundle into a "fill in" intent
             // this is added to the pending intent created in WidgetProvider updateWidgets()
@@ -121,28 +100,11 @@ public class WidgetGridService extends RemoteViewsService {
             return views;
         }
 
-        // cancel the loader and unregister the listener
-        @Override
-        public void onDestroy() {
-
-            if (mLoader != null) {
-                mLoader.stopLoading();
-                mLoader.cancelLoad();
-                mLoader.unregisterListener(this);
-            }
-        }
-
         // return size of Desserts array
         @Override
         public int getCount() {
             if (mDesserts == null) return 0;
             return mDesserts.size();
-        }
-
-        // not used
-        @Override
-        public RemoteViews getLoadingView() {
-            return null;
         }
 
         // all views in this gridview are of the same type
@@ -161,6 +123,18 @@ public class WidgetGridService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return true;
+        }
+
+        // not used
+        @Override
+        public void onDestroy() {
+
+        }
+
+        // not used
+        @Override
+        public RemoteViews getLoadingView() {
+            return null;
         }
     }
 }
