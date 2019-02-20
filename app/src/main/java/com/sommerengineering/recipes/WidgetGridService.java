@@ -3,6 +3,7 @@ package com.sommerengineering.recipes;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,40 +49,46 @@ public class WidgetGridService extends RemoteViewsService {
         @Override
         public void onCreate() {
 
-            // get Udacity URL
-            URL url = Utilities.getUdacityUrl();
-
-            // initialize the Loader
-            mLoader = new DessertsLoader(mContext, url);
-
-            // this class has the listener callbacks
-            mLoader.registerListener(LOADER_ID, this);
-
-            // loaders automatically retrieve data on a background thread
-            mLoader.startLoading();
-
         }
 
         @Override
         public void onLoadComplete(@NonNull Loader<ArrayList<Dessert>> loader, @Nullable ArrayList<Dessert> desserts) {
 
             Log.e(LOG_TAG, "~~ onLoadComplete");
-            mDesserts = desserts;
+//            mDesserts = desserts;
         }
 
         // restart loader to refresh the desserts list
         @Override
         public void onDataSetChanged() {
 
-            // loaders automatically retrieve data on a background thread
-//            if (mLoader != null) {
-//                mLoader.startLoading();
-//            }
+            Log.e(LOG_TAG, "~~ onDataSetChanged");
+
+            // get Udacity URL
+            URL url = Utilities.getUdacityUrl();
+
+            // perform the HTTP network request on this background thread
+            String responseJson = Utilities.getJsonResponseFromHttp(url);
+
+            // extract Dessert objects from the JSON payload
+            mDesserts = Utilities.extractDessertsFromJson(responseJson);
+
+//            // initialize the Loader
+//            mLoader = new DessertsLoader(mContext, url);
+//
+//            // this class has the listener callbacks
+//            mLoader.registerListener(LOADER_ID, this);
+//
+//            // loaders automatically retrieve data on a background thread
+//            mLoader.startLoading();
+
         }
 
         // behaves as onBindViewHolder() in a recycler adapter
         @Override
         public RemoteViews getViewAt(int position) {
+
+            Log.e(LOG_TAG, "~~ getViewAt");
 
             // if the desserts list has not been initialized properly then return
             if (mDesserts == null) return null;
@@ -98,7 +105,7 @@ public class WidgetGridService extends RemoteViewsService {
 
             // set text in textviews
             views.setTextViewText(R.id.tv_widget_name, name);
-            views.setTextViewText(R.id.tv_servings, String.valueOf(servings));
+            views.setTextViewText(R.id.tv_widget_servings, String.valueOf(servings));
 
             // add the dessert to a bundle
             Bundle bundle = new Bundle();
@@ -130,7 +137,6 @@ public class WidgetGridService extends RemoteViewsService {
         public int getCount() {
             if (mDesserts == null) return 0;
             return mDesserts.size();
-
         }
 
         // not used
@@ -147,8 +153,8 @@ public class WidgetGridService extends RemoteViewsService {
 
         // return current position
         @Override
-        public long getItemId(int i) {
-            return i;
+        public long getItemId(int position) {
+            return position;
         }
 
         // yes IDs are stable

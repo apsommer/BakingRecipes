@@ -17,7 +17,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public static final String TOAST_ACTION = "TOAST_ACTION";
     public static final String EXTRA_ITEM = "EXTRA_ITEM";
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -25,6 +24,8 @@ public class WidgetProvider extends AppWidgetProvider {
 
         //
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        Log.e(LOG_TAG, "~~ " + intent.getAction());
 
         //
         if (intent.getAction().equals(TOAST_ACTION)) {
@@ -37,7 +38,7 @@ public class WidgetProvider extends AppWidgetProvider {
             int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 
             //
-            Toast.makeText(context, "Clicked view " + viewIndex, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Clicked view " + viewIndex + " Widget ID = " + widgetId, Toast.LENGTH_LONG).show();
 
         }
 
@@ -54,33 +55,20 @@ public class WidgetProvider extends AppWidgetProvider {
         //
         for (int widgetId : widgetIds) {
 
+            Log.e(LOG_TAG, "~~ onUpdate: widgetID = " + widgetId);
+
             //
             Intent intent = new Intent(context, WidgetGridService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-
-            //
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-            // TODO R.layout.widget_layout
+            //
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_grid);
-
-            // TODO R.id.stack_view
-            // remoteViews.setRemoteAdapter(widgetId, R.id.gd_widget_grid, intent);
-            remoteViews.setRemoteAdapter(R.id.gd_widget_grid, intent); // TODO depreciated call use this if possible
-
-            // define an empty state (R.id.stack_view, R.id.empty_view)
+            remoteViews.setRemoteAdapter(R.id.gd_widget_grid, intent);
             remoteViews.setEmptyView(R.id.gd_widget_grid, R.id.rl_widget_grid_empty_view);
 
-//            // base intent for all items in the grid
-//            // specific dessert added to intent in WidgetGridService
-//            Intent itemClickBaseIntent = new Intent(context, RecipeActivity.class);
-//            PendingIntent pendingItemClickBaseIntent =
-//                    PendingIntent.getActivity(context, 0,
-//                            itemClickBaseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//            views.setPendingIntentTemplate(R.id.widget_grid_view, pendingItemClickBaseIntent);
-
             //
-            Intent toastIntent = new Intent(context, WidgetGridService.class);
+            Intent toastIntent = new Intent(context, WidgetProvider.class);
             toastIntent.setAction(TOAST_ACTION);
             toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
             intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
@@ -89,26 +77,24 @@ public class WidgetProvider extends AppWidgetProvider {
             PendingIntent toastPendingIntent = PendingIntent.getBroadcast(
                     context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            // R.id.stack_view
+            //
             remoteViews.setPendingIntentTemplate(R.id.gd_widget_grid, toastPendingIntent);
 
             // call into Android framework manager to refresh the widget_item
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
-        }
 
-        // continue to framework update sequence
-        super.onUpdate(context, appWidgetManager, widgetIds);
+            // this framework call triggers WidgetGridService onDataSetChanged()
+            appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.gd_widget_grid);
+        }
     }
 
     @Override
     public void onEnabled(Context context) {
         Log.e(LOG_TAG, "~~ onEnabled");
-        super.onEnabled(context);
     }
 
     @Override
     public void onDisabled(Context context) {
         Log.e(LOG_TAG, "~~ onDisabled");
-        super.onDisabled(context);
     }
 }

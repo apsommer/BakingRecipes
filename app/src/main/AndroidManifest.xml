@@ -30,14 +30,14 @@
                 android:resource="@xml/widget_provider" />
         </receiver>
 
-        <!-- a grid widget_item requires WidgetGridService and system permission to BIND_REMOTEVIEWS -->
+        <!-- a grid widget_item requires RemoteViewsService and system permission to BIND_REMOTEVIEWS -->
         <service android:name=".WidgetGridService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <!-- main activity is a recycler grid -->
         <activity
             android:name="com.sommerengineering.recipes.MainActivity"
-            android:label="Baking Recipes"
+            android:label="Recipes"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
