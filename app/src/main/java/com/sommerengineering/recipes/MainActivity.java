@@ -84,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements
     public void onRecyclerItemClick(Dessert dessert) {
 
         // bundle the Dessert into an explicit intent for RecipeActivity
-        Intent intentToStartDetailActivity = new Intent(this, RecipeActivity.class);
-        intentToStartDetailActivity.putExtra("selectedDessert", dessert);
-        startActivity(intentToStartDetailActivity);
+        Intent intentToStartRecipeActivity = new Intent(this, RecipeActivity.class);
+        intentToStartRecipeActivity.putExtra("selectedDessert", dessert);
+        startActivity(intentToStartRecipeActivity);
     }
 
     @NonNull

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_widget_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:background="@drawable/ripple_effect" >
+
+    <TextView
+        android:id="@+id/tv_widget_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/adamina"
+        android:textSize="32sp"
+        android:background="@null"
+        android:textColor="@android:color/black"
+        tools:text="Crumble Cake"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@id/tv_widget_name" >
+
+        <TextView
+            android:id="@+id/tv_widget_servings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/adamina"
+            android:textSize="12sp"
+            android:textColor="@color/gray"
+            android:background="@null"
+            tools:text="8" />
+
+        <TextView
+            android:id="@+id/tv_widget_servings_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/adamina"
+            android:textSize="12sp"
+            android:textColor="@color/gray"
+            android:background="@null"
+            android:text=" servings" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+

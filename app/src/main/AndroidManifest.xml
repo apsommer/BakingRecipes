@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- top level -->
+    <!-- top level application -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,20 +17,21 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning" >
 
-        <!-- the system broadcasts an APPWIDGET_UPDATE at the interval defined in widget_provider -->
+        <!-- WidgetProvider class handles the Android system broadcast APPWIDGET_UPDATE, this
+        broadcast occurs every 30 minutes as set in widget_item_item.xml -->
         <receiver android:name=".WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
-            <!-- identify the provider xml resource for Android system -->
+            <!-- associate the provider xml to the WidgetProvider class and this system broadcast  -->
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />
         </receiver>
 
-        <!-- service handles communication from widget to app, requires permission to BIND_REMOTEVIEWS-->
-        <service android:name=".GridWidgetService"
+        <!-- a grid widget_item requires WidgetGridService and system permission to BIND_REMOTEVIEWS -->
+        <service android:name=".WidgetGridService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <!-- main activity is a recycler grid -->

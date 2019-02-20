@@ -1,7 +1,7 @@
 <resources>
 
     <!-- top level app name -->
-    <string name="app_name">Baking Recipes</string>
+    <string name="app_name">Recipes</string>
 
     <!-- empty states for recycler grid -->
     <string name="no_internet_connection">There is no internet connection.\n\nTry (1) turning off airplane mode, (2) turning on mobile data or WiFi, (3) checking the signal in your area &#8230; then restart the app to automatically refresh the results.</string>

@@ -5,54 +5,110 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 public class WidgetProvider extends AppWidgetProvider {
 
+    // constants
+    private static final String LOG_TAG = WidgetProvider.class.getSimpleName();
+    public static final String TOAST_ACTION = "TOAST_ACTION";
+    public static final String EXTRA_ITEM = "EXTRA_ITEM";
+
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        Log.e(LOG_TAG, "~~ onReceive");
+
+        //
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        //
+        if (intent.getAction().equals(TOAST_ACTION)) {
+
+            //
+            int widgetId = intent.getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            //
+            int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
+
+            //
+            Toast.makeText(context, "Clicked view " + viewIndex, Toast.LENGTH_LONG).show();
+
+        }
+
+        //
+        super.onReceive(context, intent);
+    }
+
+    // Android system calls this every 30 minutes!
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] widgetIds) {
+
+        Log.e(LOG_TAG, "~~ onUpdate");
+
+        //
+        for (int widgetId : widgetIds) {
+
+            //
+            Intent intent = new Intent(context, WidgetGridService.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+
+            //
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+
+            // TODO R.layout.widget_layout
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_grid);
+
+            // TODO R.id.stack_view
+            // remoteViews.setRemoteAdapter(widgetId, R.id.gd_widget_grid, intent);
+            remoteViews.setRemoteAdapter(R.id.gd_widget_grid, intent); // TODO depreciated call use this if possible
+
+            // define an empty state (R.id.stack_view, R.id.empty_view)
+            remoteViews.setEmptyView(R.id.gd_widget_grid, R.id.rl_widget_grid_empty_view);
+
+//            // base intent for all items in the grid
+//            // specific dessert added to intent in WidgetGridService
+//            Intent itemClickBaseIntent = new Intent(context, RecipeActivity.class);
+//            PendingIntent pendingItemClickBaseIntent =
+//                    PendingIntent.getActivity(context, 0,
+//                            itemClickBaseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            views.setPendingIntentTemplate(R.id.widget_grid_view, pendingItemClickBaseIntent);
+
+            //
+            Intent toastIntent = new Intent(context, WidgetGridService.class);
+            toastIntent.setAction(TOAST_ACTION);
+            toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+
+            //
+            PendingIntent toastPendingIntent = PendingIntent.getBroadcast(
+                    context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // R.id.stack_view
+            remoteViews.setPendingIntentTemplate(R.id.gd_widget_grid, toastPendingIntent);
+
+            // call into Android framework manager to refresh the widget_item
+            appWidgetManager.updateAppWidget(widgetId, remoteViews);
+        }
+
+        // continue to framework update sequence
+        super.onUpdate(context, appWidgetManager, widgetIds);
+    }
+
     @Override
     public void onEnabled(Context context) {
-
-        // relevant functionality for when the first widget is created
-    }
-
-    // Android system runs calls this every 30 minutes!
-    @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        // update all active widgets
-        for (int appWidgetId : appWidgetIds) {
-
-            // helper method
-            updateRecipeWidget(context, appWidgetManager, appWidgetId, R.drawable.play);
-        }
-    }
-
-    // refresh the widget View with an intent to start MainActivity
-    static void updateRecipeWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, int imageId) {
-
-        // construct a RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-
-        // Update image
-        views.setImageViewResource(R.id.iv_placeholder, imageId);
-
-        // Widgets allow click handlers to only launch pending intents
-        views.setTextViewText(R.id.tv_placeholder, "456");
-
-        // pending intent to be executed by the system when the imageview is clicked
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-        // bind the pending intent to the View
-        views.setOnClickPendingIntent(R.id.iv_placeholder, pendingIntent);
-
-        // call into Android framework widget manager to refresh the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        Log.e(LOG_TAG, "~~ onEnabled");
+        super.onEnabled(context);
     }
 
     @Override
     public void onDisabled(Context context) {
-
-        // relevant functionality for when the last widget is disabled
+        Log.e(LOG_TAG, "~~ onDisabled");
+        super.onDisabled(context);
     }
 }
