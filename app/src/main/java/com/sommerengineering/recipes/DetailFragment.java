@@ -73,7 +73,7 @@ public class DetailFragment extends Fragment {
         mContext = getContext();
 
         // extract the dessert from the passed bundle
-        mDessert = (Dessert) getArguments().getSerializable("selectedDessert");
+        mDessert = (Dessert) getArguments().getSerializable(MainActivity.SELECTED_DESSERT);
 
         // inflate the fragment
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);

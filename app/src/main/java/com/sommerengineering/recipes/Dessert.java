@@ -29,7 +29,7 @@ public class Dessert implements Serializable {
         mImagePath = imagePath;
 
         // multiple ingredients
-        mIngredients =ingredients;
+        mIngredients = ingredients;
 
         // multiple steps
         mSteps = steps;

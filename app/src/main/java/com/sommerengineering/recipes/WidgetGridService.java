@@ -30,7 +30,6 @@ public class WidgetGridService extends RemoteViewsService {
         // member variables
         private Context mContext;
         private ArrayList<Dessert> mDesserts;
-        private DessertsLoader mLoader;
         private int mWidgetId;
 
         // required constructor sets context member variable and gets widget ID
@@ -40,13 +39,8 @@ public class WidgetGridService extends RemoteViewsService {
                     AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
-        // start a loader to retrieve the list of desserts
-        @Override
-        public void onCreate() {
-
-        }
-
-        // restart loader to refresh the desserts list
+        // refresh the desserts list
+        // synchronous network call is allowed and best practice
         @Override
         public void onDataSetChanged() {
 
@@ -55,7 +49,7 @@ public class WidgetGridService extends RemoteViewsService {
             // get Udacity URL
             URL url = Utilities.getUdacityUrl();
 
-            // perform the HTTP network request on this background thread
+            // perform the HTTP network request
             String responseJson = Utilities.getJsonResponseFromHttp(url);
 
             // extract Dessert objects from the JSON payload
@@ -88,7 +82,6 @@ public class WidgetGridService extends RemoteViewsService {
 
             // add the dessert to a bundle
             Bundle bundle = new Bundle();
-            bundle.putInt(WidgetProvider.WIDGET_ID, position);
             bundle.putInt(WidgetProvider.DESSERT_ID, dessert.getId());
 
             // put the bundle into a "fill in" intent
@@ -123,6 +116,12 @@ public class WidgetGridService extends RemoteViewsService {
         @Override
         public boolean hasStableIds() {
             return true;
+        }
+
+        // not used
+        @Override
+        public void onCreate() {
+
         }
 
         // not used

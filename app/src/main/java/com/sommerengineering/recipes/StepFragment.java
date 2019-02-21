@@ -98,8 +98,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         mContext = getContext();
 
         // extract the dessert and step ID from the passed bundle
-        mDessert = (Dessert) getArguments().getSerializable("selectedDessert");
-        mStepId = getArguments().getInt("selectedStepId");
+        mDessert = (Dessert) getArguments().getSerializable(MainActivity.SELECTED_DESSERT);
+        mStepId = getArguments().getInt(RecipeActivity.SELECTED_STEP_ID);
 
         // inflate the fragment
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);

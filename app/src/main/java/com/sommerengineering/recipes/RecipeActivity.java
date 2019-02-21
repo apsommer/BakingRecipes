@@ -14,6 +14,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
     // simple tag for log messages
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
+    public static final String SELECTED_STEP_ID = "SELECTED_STEP_ID";
 
     // flag for two-pane UI (tablet) or single pane UI (phone)
     private boolean mIsTwoPane;
@@ -30,11 +31,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // extract dessert from the main activity intent
         Intent intent = getIntent();
-        mDessert = (Dessert) intent.getSerializableExtra("selectedDessert");
+        mDessert = (Dessert) intent.getSerializableExtra(MainActivity.SELECTED_DESSERT);
 
         // put dessert into a bundle
         Bundle bundle = new Bundle();
-        bundle.putSerializable("selectedDessert", mDessert);
+        bundle.putSerializable(MainActivity.SELECTED_DESSERT, mDessert);
 
         // instantiate a new DetailFragment and add the bundle
         DetailFragment detailFragment = new DetailFragment();
@@ -72,7 +73,6 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         //
 
-
     }
 
     @Override
@@ -80,8 +80,8 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // bundle the selected dessert and the step ID for a StepFragment
         Bundle bundle = new Bundle();
-        bundle.putSerializable("selectedDessert", dessert);
-        bundle.putInt("selectedStepId", stepId);
+        bundle.putSerializable(MainActivity.SELECTED_DESSERT, dessert);
+        bundle.putInt(SELECTED_STEP_ID, stepId);
 
         // instantiate a new StepFragment and add the bundle
         StepFragment stepFragment = new StepFragment();
@@ -115,7 +115,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
             // bundle the Dessert into an explicit intent for RecipeActivity
             Intent intentToStartRecipeActivity = new Intent(this, RecipeActivity.class);
-            intentToStartRecipeActivity.putExtra("selectedDessert", mDessert);
+            intentToStartRecipeActivity.putExtra(MainActivity.SELECTED_DESSERT, mDessert);
             startActivity(intentToStartRecipeActivity);
         }
 

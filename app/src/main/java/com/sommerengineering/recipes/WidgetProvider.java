@@ -5,7 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -14,35 +14,37 @@ public class WidgetProvider extends AppWidgetProvider {
 
     // constants
     private static final String LOG_TAG = WidgetProvider.class.getSimpleName();
-    public static final String UPDATE_ACTION = "UPDATE_ACTION";
-    public static final String WIDGET_ID = "WIDGET_ID";
+    public static final String GRID_ITEM_CLICKED = "GRID_ITEM_CLICKED";
     public static final String DESSERT_ID = "DESSERT_ID";
+
+    //
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         Log.e(LOG_TAG, "~~ onReceive");
-
         Log.e(LOG_TAG, "~~ " + intent.getAction());
 
-        // fill-in intent defined in WidgetGridService carries the UPDATE_ACTION
-        // the Android system produces many more intent <ACTIONS>
-        if (intent.getAction().equals(UPDATE_ACTION)) {
+        // onReceive() is called for many more intent <ACTIONS> produced by the Android system
+        // filter for the custom defined action
+        if (intent.getAction().equals(GRID_ITEM_CLICKED)) {
 
-            // extract the integer extras from the intent
-            int widgetId = intent.getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            int itemIndex = intent.getIntExtra(WIDGET_ID, 0);
+            // extract the dessert ID
             int dessertId = intent.getIntExtra(DESSERT_ID, 0);
 
-            // TODO testing
-            Toast.makeText(context,
-                    "widgetId " + widgetId + " itemIndex " + itemIndex + " dessertId " + dessertId,
-                    Toast.LENGTH_LONG).show();
+            Log.e(LOG_TAG, "~~ " + dessertId);
+
+            /*
+            // bundle the Dessert into an explicit intent for RecipeActivity
+            Intent intentToStartRecipeActivity = new Intent(context, RecipeActivity.class);
+            intentToStartRecipeActivity.putExtra(MainActivity.SELECTED_DESSERT, dessert);
+            intentToStartRecipeActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intentToStartRecipeActivity);
+            */
 
         }
 
-        //
+        // proceed to normal onRecieve() behavior
         super.onReceive(context, intent);
     }
 
@@ -52,35 +54,39 @@ public class WidgetProvider extends AppWidgetProvider {
 
         Log.e(LOG_TAG, "~~ onUpdate");
 
-        //
+        // loop through all widgets associated with this app
         for (int widgetId : widgetIds) {
 
             Log.e(LOG_TAG, "~~ onUpdate: widgetID = " + widgetId);
 
-            //
+            // intent to start the remote grid service with the widget ID as an extra
             Intent intent = new Intent(context, WidgetGridService.class);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-            //
+            // construct a remoteview associated to layout holding the gridview
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_grid);
+
+            // set the remote adapter on the gridview using the intent for the grid service
             remoteViews.setRemoteAdapter(R.id.gd_widget_grid, intent);
+
+            // define an empty state for gridview
             remoteViews.setEmptyView(R.id.gd_widget_grid, R.id.rl_widget_grid_empty_view);
 
-            //
+            // base intent for the widget provider class is applied to every grid item
             Intent toastIntent = new Intent(context, WidgetProvider.class);
-            toastIntent.setAction(UPDATE_ACTION);
-            toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-            //
+            // add custom action string and widget ID to the intent
+            toastIntent.setAction(GRID_ITEM_CLICKED);
+            toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+
+            // put the intent into the pending intent format
             PendingIntent toastPendingIntent = PendingIntent.getBroadcast(
                     context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            //
+            // the "pending intent template" means this pending intent is applied to every item in the grid
             remoteViews.setPendingIntentTemplate(R.id.gd_widget_grid, toastPendingIntent);
 
-            // call into Android framework manager to refresh the widget_item
+            // call into Android framework manager to refresh the widget
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
 
             // this framework call triggers WidgetGridService onDataSetChanged()

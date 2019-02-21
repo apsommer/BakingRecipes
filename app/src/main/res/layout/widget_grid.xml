@@ -16,8 +16,7 @@
     <RelativeLayout
         android:id="@+id/rl_widget_grid_empty_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="match_parent" >
 
         <ImageView
             android:alpha="0.5"
@@ -29,6 +28,8 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="150dp"
             android:textAlignment="center"
             android:text="Loading recipes ..."
             android:textSize="20sp"

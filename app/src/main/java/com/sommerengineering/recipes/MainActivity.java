@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // constants
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    public static final String SELECTED_DESSERT = "SELECTED_DESSERT";
     private static final int DESSERTS_LOADER_ID = 0;
 
     // member variables
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // bundle the Dessert into an explicit intent for RecipeActivity
         Intent intentToStartRecipeActivity = new Intent(this, RecipeActivity.class);
-        intentToStartRecipeActivity.putExtra("selectedDessert", dessert);
+        intentToStartRecipeActivity.putExtra(SELECTED_DESSERT, dessert);
         startActivity(intentToStartRecipeActivity);
     }
 
