@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp"
+    android:layout_margin="@dimen/small_extra_space"
     android:background="@drawable/ripple_effect" >
 
     <TextView
@@ -13,19 +13,19 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/adamina"
-        android:textSize="32sp"
+        android:textSize="@dimen/title_text_size"
         android:background="@null"
         android:textColor="@android:color/black"
         tools:text="Crumble Cake"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="@dimen/med_margin" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/med_margin"
         android:layout_below="@id/tv_name" >
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:fontFamily="@font/adamina"
-            android:textSize="12sp"
+            android:textSize="@dimen/subtitle_text_size"
             android:textColor="@color/gray"
             android:background="@null"
             tools:text="8" />
@@ -44,10 +44,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/adamina"
-            android:textSize="12sp"
+            android:textSize="@dimen/subtitle_text_size"
             android:textColor="@color/gray"
             android:background="@null"
-            android:text=" servings" />
+            android:text="@string/servings_label" />
 
     </LinearLayout>
 

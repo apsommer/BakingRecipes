@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
-import android.view.DragAndDropPermissions;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -154,7 +153,7 @@ public class DetailFragment extends Fragment {
                 buttonDrawable = R.drawable.play_gray;
             }
             // create a button for this step; the position of the new view is returned
-            position = createButton(mStepsContainer, buttonText, position, buttonDrawable, steps, i);
+            position = createButton(mStepsContainer, buttonText, position, buttonDrawable, i);
         }
     }
 
@@ -203,7 +202,7 @@ public class DetailFragment extends Fragment {
 
     // creates a new Button with the given parameters and returns its position (ID)
     private int createButton(ViewGroup container, String text, int position,
-                             int drawableId, final ArrayList<Step> steps, final int stepId) {
+                             int drawableId, final int stepId) {
 
         // new Button
         Button button = new Button(mContext);

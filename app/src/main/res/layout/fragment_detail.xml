@@ -18,11 +18,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/adamina"
-            android:textSize="32sp"
+            android:textSize="@dimen/title_text_size"
             android:textColor="@android:color/black"
             android:background="@null"
             tools:text="Crumble Cake"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="@dimen/med_margin" />
 
         <LinearLayout
             android:id="@+id/ll_servings_container"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:fontFamily="@font/adamina"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:textColor="@color/gray"
                 android:background="@null"
                 tools:text="8" />
@@ -48,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/adamina"
                 android:textColor="@color/gray"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:background="@null"
-                android:text=" servings" />
+                android:text="@string/servings_label" />
 
         </LinearLayout>
 
@@ -66,17 +66,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/adamina"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:background="@null"
-                android:text="INGREDIENTS" />
+                android:text="@string/ingredients_label" />
 
             <View
                 android:id="@+id/ingredients_divider"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/small_extra_space"
                 android:background="@color/gray"
                 android:layout_below="@id/tv_ingredients_label"
                 android:layout_marginTop="@dimen/detail_spacing"
@@ -104,7 +104,7 @@
             android:layout_marginTop="@dimen/detail_spacing"
             android:layout_marginLeft="@dimen/detail_spacing"
             android:background="@null"
-            android:text="STEPS" />
+            android:text="@string/steps_label" />
 
         <View
             android:id="@+id/steps_divider"

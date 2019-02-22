@@ -12,11 +12,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
     // constants
     private static final String LOG_TAG = WidgetProvider.class.getSimpleName();
-    public static final String GRID_ITEM_CLICKED = "GRID_ITEM_CLICKED";
+    private static final String GRID_ITEM_CLICKED = "GRID_ITEM_CLICKED";
     public static final String INGREDIENT_ID = "INGREDIENT_ID";
 
-    //
-
+    // system broadcast calls this method
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -25,14 +24,14 @@ public class WidgetProvider extends AppWidgetProvider {
 
         // onReceive() is called for many more intent <ACTIONS> produced by the Android system
         // filter for the custom defined action
-        if (intent.getAction().equals(GRID_ITEM_CLICKED)) {
+        if (intent.getAction() != null && intent.getAction().equals(GRID_ITEM_CLICKED)) {
 
             // extract the ID
             int ingredientId = intent.getIntExtra(INGREDIENT_ID, 0);
 
             Log.e(LOG_TAG, "~~ ingredientID " + ingredientId);
 
-            //
+            // start main activity
             Intent intentToStartMainActivity = new Intent(context, MainActivity.class);
             intentToStartMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentToStartMainActivity);
@@ -91,7 +90,9 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
+
         Log.e(LOG_TAG, "~~ onEnabled");
+
     }
 
     @Override

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="false"
-    android:background="@color/colorPrimaryDark" >
+    android:background="@color/colorPrimaryDark">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,11 +19,11 @@
             android:layout_gravity="center"
             android:fontFamily="@font/adamina"
             android:gravity="center"
-            android:textSize="32sp"
+            android:textSize="@dimen/title_text_size"
             android:textColor="@android:color/black"
             android:background="@null"
             tools:text="Preheat the oven."
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/med_margin"
             />
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
@@ -33,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/med_margin"
             />
 
         <!-- this is not actually used for the given JSON payload but included here
@@ -42,25 +40,27 @@
             android:id="@+id/iv_step_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/step_image_description"
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
             tools:visibility="visible"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/med_margin"
             tools:src="@drawable/play" />
 
         <ImageView
             android:id="@+id/iv_no_video_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/no_video_description"
             android:layout_gravity="center"
             android:background="@null"
             android:gravity="center"
             android:visibility="gone"
             tools:visibility="visible"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="@dimen/med_margin"
+            android:layout_marginRight="@dimen/med_margin"
+            android:layout_marginBottom="@dimen/med_margin"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
@@ -73,7 +73,7 @@
             android:textColor="@android:color/black"
             android:background="@null"
             tools:text="Preheat the oven to 350F. Butter a deep dish pan with cooking spray ..."
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/med_margin"
             />
 
         <RelativeLayout
@@ -87,11 +87,11 @@
                 android:background="@drawable/ripple_effect"
                 android:drawableLeft="@drawable/left_arrow"
                 tools:text="Cut up carrots."
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingLeft="@dimen/med_margin"
+                android:paddingRight="@dimen/med_margin"
                 android:textAllCaps="false"
                 android:fontFamily="@font/adamina"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:textColor="@color/gray"
                 android:layout_alignParentLeft="true"
                 />
@@ -101,13 +101,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_effect"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingLeft="@dimen/med_margin"
+                android:paddingRight="@dimen/med_margin"
                 android:drawableRight="@drawable/right_arrow"
                 tools:text="Cut up carrots."
                 android:textAllCaps="false"
                 android:fontFamily="@font/adamina"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:textColor="@color/gray"
                 android:layout_alignParentRight="true"
                 />

@@ -23,14 +23,12 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
 
     // member variables
     private ArrayList<Dessert> mDesserts;
-    private final Context mContext;
     private final DessertAdapterOnClickHandler mClickHandler;
 
     // constructor
     public DessertsAdapter(Context context, ArrayList<Dessert> desserts, DessertAdapterOnClickHandler clickHandler) {
 
         // initialize member variables
-        mContext = context;
         mDesserts = desserts;
         mClickHandler = clickHandler;
     }

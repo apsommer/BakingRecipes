@@ -1,6 +1,5 @@
 package com.sommerengineering.recipes;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,8 +18,8 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
     // flag for two-pane UI (tablet) or single pane UI (phone)
     private boolean mIsTwoPane;
 
-    Dessert mDessert;
-    boolean mIsComingFromStep;
+    private Dessert mDessert;
+    private boolean mIsComingFromStep;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

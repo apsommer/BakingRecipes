@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 // POJO holds metadata for a dessert recipe
-public class Dessert implements Serializable {
+class Dessert implements Serializable {
 
     // base attributes
     private final int mId;

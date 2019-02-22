@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/widget_container"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_widget_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:textSize="32sp"
+            android:textSize="@dimen/title_text_size"
             android:typeface="serif"
             android:background="@null"
             android:textColor="@android:color/black"
-            android:text="Nutella Pie"
+            android:text="@string/nutella_pie_title"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="@dimen/med_margin" />
 
         <LinearLayout
             android:id="@+id/rl_widget_subtitle_container"
@@ -29,29 +25,29 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@id/tv_name" >
+            android:layout_marginBottom="@dimen/med_margin"
+            android:layout_below="@id/tv_widget_name" >
 
             <TextView
-                android:id="@+id/tv_servings"
+                android:id="@+id/tv_widget_servings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:typeface="serif"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:textColor="@color/gray"
                 android:background="@null"
-                android:text="8 " />
+                android:text="@string/widget_8_servings" />
 
             <TextView
-                android:id="@+id/tv_servings_label"
+                android:id="@+id/tv_widget_servings_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/subtitle_text_size"
                 android:typeface="serif"
                 android:textColor="@color/gray"
                 android:background="@null"
-                android:text=" servings" />
+                android:text="@string/servings_label" />
 
         </LinearLayout>
 
@@ -78,6 +74,7 @@
                 android:alpha="0.5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/launcher_icon_description"
                 android:src="@mipmap/ic_launcher"/>
 
             <TextView
@@ -87,13 +84,11 @@
                 android:layout_height="wrap_content"
                 android:typeface="serif"
                 android:textAlignment="center"
-                android:text="Loading ingredients ..."
-                android:textSize="20sp"
+                android:text="@string/widget_loading_message"
+                android:textSize="@dimen/empty_state_text_size"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
         </RelativeLayout>
 
     </RelativeLayout>
-
-</FrameLayout>

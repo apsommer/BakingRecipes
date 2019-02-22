@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,7 +26,7 @@ public class WidgetGridService extends RemoteViewsService {
     }
 
     //
-    public class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+    class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         private static final int LOADER_ID = 0;
 
@@ -37,7 +38,7 @@ public class WidgetGridService extends RemoteViewsService {
         private int mWidgetId;
 
         // required constructor sets context member variable and gets widget ID
-        public GridRemoteViewsFactory(Context context, Intent intent) {
+        GridRemoteViewsFactory(Context context, Intent intent) {
             mContext = context;
             mWidgetId = intent.getIntExtra(
                     AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);

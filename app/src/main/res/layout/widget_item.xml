@@ -16,7 +16,7 @@
         android:gravity="start"
         android:typeface="serif"
         android:layout_marginStart="@dimen/detail_spacing"
-        android:textSize="18sp"
+        android:textSize="@dimen/ingredient_title"
         android:background="@color/white"
         android:textColor="@android:color/black"
         tools:text="Garlic" />
@@ -28,7 +28,7 @@
         android:layout_below="@id/tv_widget_name"
         android:gravity="start"
         android:typeface="serif"
-        android:textSize="12sp"
+        android:textSize="@dimen/subtitle_text_size"
         android:layout_marginStart="@dimen/detail_spacing"
         android:background="@color/white"
         android:textColor="@color/gray"
@@ -42,7 +42,7 @@
         android:layout_toEndOf="@id/tv_widget_quantity"
         android:gravity="start"
         android:typeface="serif"
-        android:textSize="12sp"
+        android:textSize="@dimen/subtitle_text_size"
         android:background="@color/white"
         android:textColor="@color/gray"
         tools:text="CUPS" />

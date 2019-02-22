@@ -1,7 +1,6 @@
 package com.sommerengineering.recipes;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
@@ -311,7 +310,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     }
 
     // if a video is playing then stop and release it
-    public void releasePlayer() {
+    private void releasePlayer() {
 
         // set media session to inactive
         if (mMediaSession != null) {

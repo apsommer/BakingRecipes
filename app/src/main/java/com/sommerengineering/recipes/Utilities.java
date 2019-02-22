@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 // final access modifier because no objects of this class will ever be created
 // this class is a holder for various static methods related to the network connection
-public final class Utilities {
+final class Utilities {
 
     // simple tag for log messages
     private static final String LOG_TAG = Utilities.class.getSimpleName();
@@ -116,6 +116,7 @@ public final class Utilities {
                     JSONObject ingredient = allIngredients.getJSONObject(j);
 
                     // extract the ingredient's basic attributes
+                    //noinspection UnnecessaryLocalVariable
                     int ingredientId = j;
                     int quantity = ingredient.getInt("quantity");
                     String measure = ingredient.getString("measure");

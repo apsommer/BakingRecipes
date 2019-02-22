@@ -3,7 +3,7 @@ package com.sommerengineering.recipes;
 import java.io.Serializable;
 
 // POJO holds metadata for a cooking step when making a dessert
-public class Step implements Serializable {
+class Step implements Serializable {
 
     // base attributes
     private final int mId;
