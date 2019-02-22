@@ -6,58 +6,46 @@
     android:id="@+id/rl_widget_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark" >
+    android:background="@color/white" >
 
     <!-- RemoteViews will not accept custom font -->
     <TextView
         android:id="@+id/tv_widget_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="start"
         android:typeface="serif"
-        android:textSize="32sp"
+        android:layout_marginStart="@dimen/detail_spacing"
+        android:textSize="18sp"
         android:background="@color/white"
         android:textColor="@android:color/black"
-        tools:text="Crumble Cake"
-        android:paddingTop="8dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp" />
+        tools:text="Garlic" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_widget_quantity"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginBottom="1dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
+        android:layout_below="@id/tv_widget_name"
+        android:gravity="start"
+        android:typeface="serif"
+        android:textSize="12sp"
+        android:layout_marginStart="@dimen/detail_spacing"
         android:background="@color/white"
-        android:layout_below="@id/tv_widget_name" >
+        android:textColor="@color/gray"
+        tools:text="5 " />
 
-        <TextView
-            android:id="@+id/tv_widget_servings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:typeface="serif"
-            android:textSize="12sp"
-            android:textColor="@color/gray"
-            android:layout_marginBottom="8dp"
-            android:background="@null"
-            tools:text="8" />
-
-        <TextView
-            android:id="@+id/tv_widget_servings_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:typeface="serif"
-            android:textSize="12sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/gray"
-            android:background="@null"
-            android:text=" servings" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_widget_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_widget_name"
+        android:layout_toEndOf="@id/tv_widget_quantity"
+        android:gravity="start"
+        android:typeface="serif"
+        android:textSize="12sp"
+        android:background="@color/white"
+        android:textColor="@color/gray"
+        tools:text="CUPS" />
 
 </RelativeLayout>
 

@@ -5,17 +5,15 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 public class WidgetProvider extends AppWidgetProvider {
 
     // constants
     private static final String LOG_TAG = WidgetProvider.class.getSimpleName();
     public static final String GRID_ITEM_CLICKED = "GRID_ITEM_CLICKED";
-    public static final String DESSERT_ID = "DESSERT_ID";
+    public static final String INGREDIENT_ID = "INGREDIENT_ID";
 
     //
 
@@ -29,18 +27,15 @@ public class WidgetProvider extends AppWidgetProvider {
         // filter for the custom defined action
         if (intent.getAction().equals(GRID_ITEM_CLICKED)) {
 
-            // extract the dessert ID
-            int dessertId = intent.getIntExtra(DESSERT_ID, 0);
+            // extract the ID
+            int ingredientId = intent.getIntExtra(INGREDIENT_ID, 0);
 
-            Log.e(LOG_TAG, "~~ " + dessertId);
+            Log.e(LOG_TAG, "~~ ingredientID " + ingredientId);
 
-            /*
-            // bundle the Dessert into an explicit intent for RecipeActivity
-            Intent intentToStartRecipeActivity = new Intent(context, RecipeActivity.class);
-            intentToStartRecipeActivity.putExtra(MainActivity.SELECTED_DESSERT, dessert);
-            intentToStartRecipeActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intentToStartRecipeActivity);
-            */
+            //
+            Intent intentToStartMainActivity = new Intent(context, MainActivity.class);
+            intentToStartMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intentToStartMainActivity);
 
         }
 
