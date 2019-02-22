@@ -1,3 +1,7 @@
+Overview
+
+This Android app views recipes and their steps in video format. Media loading classes, UI tests, and third party libraries are used, as well as a home screen widget.
+
 Project Overview
 
     Take app from functional to production ready.
