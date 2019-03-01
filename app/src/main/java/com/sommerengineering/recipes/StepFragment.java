@@ -266,8 +266,6 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
     }
 
-
-
     // play video using ExoPlayer
     private void setVideo(Bundle inState) {
 
@@ -334,12 +332,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
     }
 
-    // release the ExoPlayer and media session when the activity is destroyed
+    // stop and release the player and media session
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        // stop and release the player and media session
+    public void onStop() {
+        super.onStop();
         releasePlayer();
     }
 
