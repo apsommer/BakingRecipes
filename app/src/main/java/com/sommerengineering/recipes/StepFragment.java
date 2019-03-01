@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -254,7 +255,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
 
         // check that the image URL is valid
-        if (thumbnailPath != null && !thumbnailPath.isEmpty()) {
+        if (!TextUtils.isEmpty(thumbnailPath)) {
 
             // ! placeholder image must be set for the Picasso library to load correctly
             ColorDrawable simpleColor =
@@ -274,7 +275,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         String videoPath = mStep.getVideoPath();
 
         // if there is no video then display the app icon as a placeholder and return
-        if (videoPath == null || videoPath.isEmpty()) {
+        if (TextUtils.isEmpty(videoPath)) {
             mNoVideoIv.setVisibility(View.VISIBLE);
             return;
         }
