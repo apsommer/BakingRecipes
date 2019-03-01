@@ -49,6 +49,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     // simple tag for log messages
     private static final String LOG_TAG = StepFragment.class.getSimpleName();
 
+    // constants
+    private static final String EXOPLAYER_POSITION_KEY = "EXOPLAYER_POSITION_KEY";
+    private static final String EXOPLAYER_READY_KEY = "EXOPLAYER_READY_KEY";
+
     // member variables
     private Context mContext;
     private Dessert mDessert;
@@ -90,8 +94,17 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save the video seek position and isPlaying boolean
+        outState.putLong(EXOPLAYER_POSITION_KEY, mExoPlayer.getCurrentPosition());
+        outState.putBoolean(EXOPLAYER_READY_KEY, mExoPlayer.getPlayWhenReady());
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle bundle) {
+                             @Nullable Bundle inState) {
 
         // reference to activity context
         mContext = getContext();
@@ -123,7 +136,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         setImage();
 
         // load the step video into the UI using ExoPlayer
-        setVideo();
+        setVideo(inState);
 
         // return the inflated view
         return rootView;
@@ -252,8 +265,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         }
     }
 
+
+
     // play video using ExoPlayer
-    private void setVideo() {
+    private void setVideo(Bundle inState) {
 
         // extract the video URL from the current step
         String videoPath = mStep.getVideoPath();
@@ -293,10 +308,28 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
             // prepare the player with the media source and play when ready
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
 
-            // initialize a media session to give external clients (ex. headphones) control of the player
+            // initialize a media session to give external clients
+            // (ex. headphones) control of the player
             initializeMediaSession();
+
+            // check if a saveInstanceBundle was passed
+            // catches the condition of the video playing and the user rotates the device screen
+            if (inState != null) {
+
+                // extract the position and play state from the key:value pairs
+                long videoPosition = inState.getLong(EXOPLAYER_POSITION_KEY);
+                boolean isPlaying = inState.getBoolean(EXOPLAYER_READY_KEY);
+
+                // set the player to these saved values
+                mExoPlayer.setPlayWhenReady(isPlaying);
+                mExoPlayer.seekTo(videoPosition);
+
+            // if a savedInstanceBundle does not exist then play video from the beginning
+            } else {
+
+                mExoPlayer.setPlayWhenReady(true);
+            }
         }
     }
 
