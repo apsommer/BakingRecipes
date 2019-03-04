@@ -38,7 +38,7 @@ public class MainActivityIntentTest {
 
     // test that clicking on a recycler item generates an Intent for the RecipeActivity
     @Test
-    public void clickNextArrow_SendsIntentForPlayerActivity() {
+    public void clickNextArrow_SendsIntentForRecipeActivity() {
         onView(withId(R.id.rv_recycler)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         intended(hasComponent(RecipeActivity.class.getName()));
     }
