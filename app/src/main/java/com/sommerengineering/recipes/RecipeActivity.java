@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -18,13 +19,13 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
     public static final String SELECTED_STEP_ID = "SELECTED_STEP_ID";
     public static final String IS_COMING_FROM_STEP = "IS_COMING_FROM_STEP";
 
-    // flag for two-pane UI (tablet) or single pane UI (phone)
-    private boolean mIsTwoPane;
-
+    // member variables
+    private boolean mIsTablet;
     private Dessert mDessert;
     private boolean mIsComingFromStep;
     private int mStepId;
 
+    // save the step ID if this activity is destroyed on orientation change
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -55,12 +56,11 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         // get reference to the Android fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // detect single- or two- pane layout from presence of view ID only in two-pane layout
-        // this conditional is for single-pane
-        if (findViewById(R.id.fl_detail_fragment_container) == null) {
+        // set flag for single- or two- pane layout
+        mIsTablet = getResources().getBoolean(R.bool.isTablet);
 
-            // set flag
-            mIsTwoPane = false;
+        // this conditional is for single-pane
+        if (!mIsTablet) {
 
             // check if a saved bundle exists
             if (inState != null) {
@@ -81,9 +81,6 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
         // two-pane layout
         } else {
-
-            // set flag
-            mIsTwoPane = true;
 
             // get current device width in dp
             int dpWidth = getResources().getDisplayMetrics().widthPixels;
@@ -122,13 +119,29 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // single pane layout: step fragment replaces the recipe fragment
-        if (!mIsTwoPane) {
+        if (!mIsTablet) {
             fragmentManager.beginTransaction().replace(R.id.fl_fragment_container, stepFragment).commit();
 
         // two-pane layout: recipe fragment and step fragment shown simultaneously
         } else {
             fragmentManager.beginTransaction().replace(R.id.fl_step_fragment_container, stepFragment).commit();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // get the menu item ID
+        int itemId = item.getItemId();
+
+        // the up button has the same behavior as the back button
+        if (itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        // proceed with normal framework behavior
+        return super.onOptionsItemSelected(item);
     }
 
     // control navigation
@@ -139,7 +152,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         finish();
 
         // the user is on a single-pane layout and coming from the step fragment the restart this activity
-        if (!mIsTwoPane && mIsComingFromStep) {
+        if (!mIsTablet && mIsComingFromStep) {
 
             // bundle the Dessert into an explicit intent for RecipeActivity
             Intent intentToStartRecipeActivity = new Intent(this, RecipeActivity.class);
