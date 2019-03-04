@@ -320,7 +320,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 // extract the position and play state from the key:value pairs
                 long videoPosition = inState.getLong(EXOPLAYER_POSITION_KEY);
                 boolean isPlaying = inState.getBoolean(EXOPLAYER_READY_KEY);
-                
+
                 // set the player to these saved values
                 mExoPlayer.seekTo(videoPosition);
                 mExoPlayer.setPlayWhenReady(isPlaying);
