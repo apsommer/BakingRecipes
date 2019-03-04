@@ -6,27 +6,8 @@
     tools:context="com.sommerengineering.recipes.MainActivity" >
 
     <item
-        android:id="@+id/dessert_1"
-        android:title="Dessert 1"
-        android:orderInCategory="1"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/dessert_2"
-        android:title="Dessert 2"
-        android:orderInCategory="2"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/dessert_3"
-        android:title="Dessert 3"
-        android:orderInCategory="3"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/dessert_4"
-        android:title="Dessert 4"
-        android:orderInCategory="4"
-        app:showAsAction="never" />
-
+        android:title="Apples"
+        app:showAsAction="always"
+        />
+    
 </menu>

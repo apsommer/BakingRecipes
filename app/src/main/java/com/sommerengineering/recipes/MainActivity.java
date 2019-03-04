@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements
     // member variables
     private Context mContext;
     private DessertsAdapter mAdapter;
+    private ArrayList<Dessert> mDesserts;
 
     // Butterknife view binding
     @BindView(R.id.rv_recycler) RecyclerView mRecycler;
@@ -110,17 +112,22 @@ public class MainActivity extends AppCompatActivity implements
         // clear the adapter of any previous results
         mAdapter.clear();
 
+        // set the member variable
+        mDesserts = desserts;
+
         // check that the list of desserts was loaded correctly
-        if (desserts != null && !desserts.isEmpty()) {
+        if (mDesserts != null && !mDesserts.isEmpty()) {
 
             // refresh adapter with results from HTTP request --> JSON payload --> ArrayList<Dessert>
-            mAdapter.addAll(desserts);
+            mAdapter.addAll(mDesserts);
             mAdapter.notifyDataSetChanged();
         }
 
         // hide the progress bar
         mProgressBar.setVisibility(View.INVISIBLE);
 
+        // triggers call to onPrepareOptionsMenu()
+        invalidateOptionsMenu();
     }
 
     // previously created loader is no longer valid and its data should be removed from the UI
@@ -131,11 +138,32 @@ public class MainActivity extends AppCompatActivity implements
         mRecycler.setAdapter(null);
     }
 
-    // inflate overflow menu at top right of action bar
+    // inflate blank overflow menu at top right of action bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
         return true;
+    }
+
+    // populate the overflow menu with dessert names
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        // delete existing contents of overflow menu
+        invalidateOptionsMenu();
+
+        // if the desserts list has finished loading, add the dessert names as menu items
+        if (mDesserts != null && !mDesserts.isEmpty()) {
+
+            Dessert dessert;
+            for (int i = 0; i < mDesserts.size(); i++) {
+                dessert = mDesserts.get(i);
+                menu.add(dessert.getName());
+            }
+        }
+
+        // continue with normal framework behavior for options menu
+        return super.onPrepareOptionsMenu(menu);
     }
 
     // items within the overflow menu
@@ -158,6 +186,8 @@ public class MainActivity extends AppCompatActivity implements
         editor.apply();
 
         // TODO raise broadcast to grid widget service
+
+        Log.e("~~", String.valueOf(itemId));
 
         // continue with the framework default menu handling
         return super.onOptionsItemSelected(item);

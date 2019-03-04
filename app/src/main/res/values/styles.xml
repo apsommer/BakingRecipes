@@ -1,13 +1,20 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- base application -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- Customize your theme here. -->
+        <!-- framework colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:actionOverflowButtonStyle">@style/CustomActionBar</item>
+
+    </style>
+
+    <!-- 123 -->
+    <style name="CustomActionBar">
+        <item name="android:src">@mipmap/ic_launcher</item>
     </style>
 
 </resources>
