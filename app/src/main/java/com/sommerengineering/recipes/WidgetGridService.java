@@ -25,10 +25,8 @@ public class WidgetGridService extends RemoteViewsService {
         return new GridRemoteViewsFactory(this.getApplicationContext(), intent);
     }
 
-    //
+    // this class serves as the adapter for the remote widget grid
     class GridRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-
-        private static final int LOADER_ID = 0;
 
         // member variables
         private Context mContext;
@@ -37,7 +35,7 @@ public class WidgetGridService extends RemoteViewsService {
         private ArrayList<Ingredient> mIngredients;
         private int mWidgetId;
 
-        // required constructor sets context member variable and gets widget ID
+        // set member variables
         GridRemoteViewsFactory(Context context, Intent intent) {
             mContext = context;
             mWidgetId = intent.getIntExtra(
@@ -45,13 +43,11 @@ public class WidgetGridService extends RemoteViewsService {
         }
 
         // refresh the desserts list
-        // synchronous network call is allowed and best practice
+        // NOTE: the synchronous network call is allowed and best practice
         @Override
         public void onDataSetChanged() {
 
-            Log.e(LOG_TAG, "~~ onDataSetChanged");
-
-            // get Udacity URL
+            // get Udacity URL from utilities class
             URL url = Utilities.getUdacityUrl();
 
             // perform the HTTP network request
@@ -60,24 +56,23 @@ public class WidgetGridService extends RemoteViewsService {
             // extract Dessert objects from the JSON payload
             mDesserts = Utilities.extractDessertsFromJson(responseJson);
 
-            // TODO arbitrarily display ingredients for Dessert 0 in widget
+            // TODO get dessert ID from shared preferences
             mDessert = mDesserts.get(0);
+
+            // TODO setup title textviews
 
             // get ingredients list
             mIngredients = mDessert.getIngredients();
-
         }
 
         // behaves as onBindViewHolder() in a recycler adapter
         @Override
         public RemoteViews getViewAt(int position) {
 
-            Log.e(LOG_TAG, "~~ getViewAt");
-
             // if the ingredients list has not been initialized properly then return
             if (mIngredients == null) return null;
 
-            // get the ingredient at this position and extract its basic attributes
+            // get the ingredient at this position and extract its metadata
             Ingredient ingredient = mIngredients.get(position);
             String name = StringUtils.capitalize(ingredient.getName().toLowerCase());
             String quantity = String.valueOf(ingredient.getQuantity()) + " ";
@@ -86,13 +81,13 @@ public class WidgetGridService extends RemoteViewsService {
             // create a RemoteViews object associated with the widget_item layout
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
 
-            // set text in textviews
+            // set text in the various textviews
             views.setTextViewText(R.id.tv_widget_name, name);
             views.setTextViewText(R.id.tv_widget_quantity, quantity);
             views.setTextViewText(R.id.tv_widget_measure, measure);
 
-            // put the bundle into a "fill in" intent
-            // this is added to the pending intent created in WidgetProvider updateWidgets()
+            // put a bundle into a "fill in" intent
+            // this intent is added to the pending intent created in WidgetProvider updateWidgets()
             Intent fillInIntent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putInt(WidgetProvider.INGREDIENT_ID, ingredient.getId());
@@ -102,7 +97,7 @@ public class WidgetGridService extends RemoteViewsService {
             return views;
         }
 
-        // return size of Desserts array
+        // return size of ingredients arraylist
         @Override
         public int getCount() {
             if (mIngredients == null) return 0;
