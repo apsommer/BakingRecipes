@@ -13,19 +13,31 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
 
     // simple tag for log messages
     private static final String LOG_TAG = RecipeActivity.class.getSimpleName();
+
+    // constants
     public static final String SELECTED_STEP_ID = "SELECTED_STEP_ID";
+    public static final String IS_COMING_FROM_STEP = "IS_COMING_FROM_STEP";
 
     // flag for two-pane UI (tablet) or single pane UI (phone)
     private boolean mIsTwoPane;
 
     private Dessert mDessert;
     private boolean mIsComingFromStep;
+    private int mStepId;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(IS_COMING_FROM_STEP, mIsComingFromStep);
+        outState.putInt(SELECTED_STEP_ID, mStepId);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle inState) {
 
         // inflate the fragment container
-        super.onCreate(savedInstanceState);
+        super.onCreate(inState);
         setContentView(R.layout.activity_recipe);
 
         // extract dessert from the main activity intent
@@ -43,15 +55,34 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         // get reference to the Android fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // single pane layout
+        // detect single- or two- pane layout from presence of view ID only in two-pane layout
+        // this conditional is for single-pane
         if (findViewById(R.id.fl_detail_fragment_container) == null) {
+
+            // set flag
             mIsTwoPane = false;
 
-            // create the detail fragment showing ingredients and step metadata
-            fragmentManager.beginTransaction().add(R.id.fl_fragment_container, detailFragment).commit();
+            // check if a saved bundle exists
+            if (inState != null) {
+                mIsComingFromStep = inState.getBoolean(IS_COMING_FROM_STEP);
+                mStepId = inState.getInt(SELECTED_STEP_ID);
+            }
+
+            // user was just viewing the step fragment
+            if (mIsComingFromStep) {
+
+                // use the callback for selecting a step
+                onStepSelected(mDessert, mStepId);
+
+            // user is coming from main activity
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.fl_fragment_container, detailFragment).commit();
+            }
 
         // two-pane layout
         } else {
+
+            // set flag
             mIsTwoPane = true;
 
             // get current device width in dp
@@ -67,26 +98,25 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
             recipeContainer.setLayoutParams(layoutParams);
 
             // create the recipe fragment showing ingredients and step metadata
-            fragmentManager.beginTransaction().add(R.id.fl_detail_fragment_container, detailFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.fl_detail_fragment_container, detailFragment).commit();
         }
-
-        //
-
     }
 
+    // triggered when the user selects a step
     @Override
     public void onStepSelected(Dessert dessert, int stepId) {
+
+        mIsComingFromStep = true;
+        mStepId = stepId;
 
         // bundle the selected dessert and the step ID for a StepFragment
         Bundle bundle = new Bundle();
         bundle.putSerializable(MainActivity.SELECTED_DESSERT, dessert);
-        bundle.putInt(SELECTED_STEP_ID, stepId);
+        bundle.putInt(SELECTED_STEP_ID, mStepId);
 
         // instantiate a new StepFragment and add the bundle
         StepFragment stepFragment = new StepFragment();
         stepFragment.setArguments(bundle);
-
-        mIsComingFromStep = true;
 
         // get reference to the Android fragment manager
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -99,7 +129,6 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         } else {
             fragmentManager.beginTransaction().replace(R.id.fl_step_fragment_container, stepFragment).commit();
         }
-
     }
 
     // control navigation
@@ -109,7 +138,7 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
         // end activity
         finish();
 
-        // the user is coming from the step activity on a single pane layout
+        // the user is on a single-pane layout and coming from the step fragment the restart this activity
         if (!mIsTwoPane && mIsComingFromStep) {
 
             // bundle the Dessert into an explicit intent for RecipeActivity
@@ -118,11 +147,10 @@ public class RecipeActivity extends AppCompatActivity implements DetailFragment.
             startActivity(intentToStartRecipeActivity);
         }
 
-        // start MainActivity
+        // any other case go back to main activity
         else {
             Intent intentToStartMainActivity = new Intent(this, MainActivity.class);
             startActivity(intentToStartMainActivity);
         }
-
     }
 }

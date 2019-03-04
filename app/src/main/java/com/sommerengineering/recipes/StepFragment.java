@@ -101,6 +101,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         // save the video seek position and isPlaying boolean
         outState.putLong(EXOPLAYER_POSITION_KEY, mExoPlayer.getCurrentPosition());
         outState.putBoolean(EXOPLAYER_READY_KEY, mExoPlayer.getPlayWhenReady());
+
     }
 
     @Override
@@ -312,23 +313,25 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             // (ex. headphones) control of the player
             initializeMediaSession();
 
-            // check if a saveInstanceBundle was passed
-            // catches the condition of the video playing and the user rotates the device screen
+            // check if a saved state was passed
+            // this catches the condition of the video playing and the user rotates the device
             if (inState != null) {
 
                 // extract the position and play state from the key:value pairs
                 long videoPosition = inState.getLong(EXOPLAYER_POSITION_KEY);
                 boolean isPlaying = inState.getBoolean(EXOPLAYER_READY_KEY);
 
+                // TODO seekTo() does not work on a single-pane phone, but works fine on the two-pane tablet. All these values are good and getting to the seekTo() call, why the video restart and not skip to the inputted position!?
+                Log.e("~~", String.valueOf(videoPosition));
+                Log.e("~~", String.valueOf(isPlaying));
+                Log.e("~~", String.valueOf(mExoPlayer));
+
                 // set the player to these saved values
-                mExoPlayer.setPlayWhenReady(isPlaying);
                 mExoPlayer.seekTo(videoPosition);
+                mExoPlayer.setPlayWhenReady(isPlaying);
 
-            // if a savedInstanceBundle does not exist then play video from the beginning
-            } else {
-
-                mExoPlayer.setPlayWhenReady(true);
-            }
+            // if inState does not exist then play video from the beginning
+            } else mExoPlayer.setPlayWhenReady(true);
         }
     }
 
