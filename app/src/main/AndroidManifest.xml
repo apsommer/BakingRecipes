@@ -49,7 +49,8 @@
         and specific step metadata in fragment_step -->
         <activity
             android:name="com.sommerengineering.recipes.RecipeActivity"
-            android:label="Recipe Details" >
+            android:label="Recipe Details"
+            android:configChanges="orientation|screenSize|layoutDirection" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sommerengineering.recipes.MainActivity" />

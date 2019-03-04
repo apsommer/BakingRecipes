@@ -320,12 +320,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
                 // extract the position and play state from the key:value pairs
                 long videoPosition = inState.getLong(EXOPLAYER_POSITION_KEY);
                 boolean isPlaying = inState.getBoolean(EXOPLAYER_READY_KEY);
-
-                // TODO seekTo() does not work on a single-pane phone, but works fine on the two-pane tablet. All these values are good and getting to the seekTo() call, why the video restart and not skip to the inputted position!?
-                Log.e("~~", String.valueOf(videoPosition));
-                Log.e("~~", String.valueOf(isPlaying));
-                Log.e("~~", String.valueOf(mExoPlayer));
-
+                
                 // set the player to these saved values
                 mExoPlayer.seekTo(videoPosition);
                 mExoPlayer.setPlayWhenReady(isPlaying);
