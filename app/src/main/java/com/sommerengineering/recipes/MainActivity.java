@@ -2,8 +2,10 @@ package com.sommerengineering.recipes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -12,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -68,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements
             mRecycler.setAdapter(mAdapter);
         }
 
-        // if the internet connect is active then start a loader
-        if (isConnected()) {
+        // if the internet connection is active then start a loader
+        boolean isConnected = Utilities.isConnected(mContext);
+        if (isConnected) {
             LoaderManager loaderManager = getSupportLoaderManager();
             loaderManager.initLoader(DESSERTS_LOADER_ID, null, this);
         }
@@ -126,18 +131,36 @@ public class MainActivity extends AppCompatActivity implements
         mRecycler.setAdapter(null);
     }
 
-    // check status of internet connectivity
-    private boolean isConnected() {
+    // inflate overflow menu at top right of action bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overflow, menu);
+        return true;
+    }
 
-        // get internet connectivity status as a boolean
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+    // items within the overflow menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        // get network connection metadata
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        // get id of selected menu item
+        int itemId = item.getItemId();
 
-        // boolean representing internet is connected, or in progress connecting
-        return (activeNetwork != null) && activeNetwork.isConnectedOrConnecting();
+        // get the widget dessert preference key string
+        String widgetDessertKey = getString(R.string.widget_dessert_key);
+
+        // create a shared preference editor
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // persistently store the preference for the widget dessert ID (= item ID)
+        editor.putInt(widgetDessertKey, itemId);
+        editor.apply();
+
+        // TODO raise broadcast to grid widget service
+
+        // continue with the framework default menu handling
+        return super.onOptionsItemSelected(item);
     }
 }
 

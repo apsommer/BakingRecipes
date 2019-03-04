@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -29,6 +31,20 @@ final class Utilities {
     // URL constants
     private static final String UDACITY_BASE_URL =
             "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+
+    // check status of internet connectivity
+    public static boolean isConnected(Context context) {
+
+        // get internet connectivity status as a boolean
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // get network connection metadata
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+
+        // boolean representing internet is connected, or in progress connecting
+        return (activeNetwork != null) && activeNetwork.isConnectedOrConnecting();
+    }
 
     // create a URL for the given Udacity JSON server
     static URL getUdacityUrl() {
