@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning" >
 
         <!-- WidgetProvider class handles the Android system broadcast APPWIDGET_UPDATE, this
-        broadcast occurs every 30 minutes as set in widget_item_item.xml -->
+        broadcast occurs every 30 minutes as set in widget_item_item -->
         <receiver android:name=".WidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

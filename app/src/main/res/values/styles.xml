@@ -14,7 +14,7 @@
 
     <!-- 123 -->
     <style name="CustomActionBar">
-        <item name="android:src">@mipmap/ic_launcher</item>
+        <item name="android:src">@drawable/overflow_menu_icon</item>
     </style>
 
 </resources>
