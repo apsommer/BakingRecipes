@@ -1,5 +1,7 @@
 package com.sommerengineering.recipes;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -170,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // get id of selected menu item
-        int itemId = item.getItemId();
+        // get title of the selected dessert item
+        String itemTitle = String.valueOf(item.getTitle());
 
         // get the widget dessert preference key string
         String widgetDessertKey = getString(R.string.widget_dessert_key);
@@ -181,13 +183,23 @@ public class MainActivity extends AppCompatActivity implements
                 PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // persistently store the preference for the widget dessert ID (= item ID)
-        editor.putInt(widgetDessertKey, itemId);
+        // persistently store the preference for the widget dessert name
+        editor.putString(widgetDessertKey, itemTitle);
         editor.apply();
 
-        // TODO raise broadcast to grid widget service
+        // create an intent to start the WidgetProvider class
+        Intent intentToStartWidgetProvider = new Intent(this, WidgetProvider.class);
+        intentToStartWidgetProvider.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
-        Log.e("~~", String.valueOf(itemId));
+        // get all the widget IDs
+        ComponentName componentName = new ComponentName(getApplication(), WidgetProvider.class);
+        int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(componentName);
+
+        // add the widget IDs to the intent
+        intentToStartWidgetProvider.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+
+        // raising this broadcast triggers WidgetProvider onUpdate()
+        sendBroadcast(intentToStartWidgetProvider);
 
         // continue with the framework default menu handling
         return super.onOptionsItemSelected(item);

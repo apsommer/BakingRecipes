@@ -15,27 +15,24 @@ public class WidgetProvider extends AppWidgetProvider {
     private static final String GRID_ITEM_CLICKED = "GRID_ITEM_CLICKED";
     public static final String INGREDIENT_ID = "INGREDIENT_ID";
 
-    // system broadcast calls this method
+    // system broadcasts and the explicit broadcast from main activity triggers this method
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.e(LOG_TAG, "~~ onReceive");
-        Log.e(LOG_TAG, "~~ " + intent.getAction());
-
-        // onReceive() is called for many more intent <ACTIONS> produced by the Android system
-        // filter for the custom defined action
+        // filter for the custom defined action of grid item clicked
         if (intent.getAction() != null && intent.getAction().equals(GRID_ITEM_CLICKED)) {
 
             // extract the ID
             int ingredientId = intent.getIntExtra(INGREDIENT_ID, 0);
 
+            // just a log message for now; this shows that individual items in the grid hold their
+            // own "fill-in" intents correctly
             Log.e(LOG_TAG, "~~ ingredientID " + ingredientId);
 
             // start main activity
             Intent intentToStartMainActivity = new Intent(context, MainActivity.class);
             intentToStartMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentToStartMainActivity);
-
         }
 
         // proceed to normal onRecieve() behavior
@@ -46,12 +43,10 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] widgetIds) {
 
-        Log.e(LOG_TAG, "~~ onUpdate");
+        Log.e("~~ ", "onUpdate");
 
         // loop through all widgets associated with this app
         for (int widgetId : widgetIds) {
-
-            Log.e(LOG_TAG, "~~ onUpdate: widgetID = " + widgetId);
 
             // intent to start the remote grid service with the widget ID as an extra
             Intent intent = new Intent(context, WidgetGridService.class);
@@ -67,18 +62,18 @@ public class WidgetProvider extends AppWidgetProvider {
             remoteViews.setEmptyView(R.id.gd_widget_grid, R.id.rl_widget_grid_empty_view);
 
             // base intent for the widget provider class is applied to every grid item
-            Intent toastIntent = new Intent(context, WidgetProvider.class);
+            Intent intentToStartWidgetProvider = new Intent(context, WidgetProvider.class);
 
             // add custom action string and widget ID to the intent
-            toastIntent.setAction(GRID_ITEM_CLICKED);
-            toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+            intentToStartWidgetProvider.setAction(GRID_ITEM_CLICKED);
+            intentToStartWidgetProvider.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
 
             // put the intent into the pending intent format
-            PendingIntent toastPendingIntent = PendingIntent.getBroadcast(
-                    context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context, 0, intentToStartWidgetProvider, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // the "pending intent template" means this pending intent is applied to every item in the grid
-            remoteViews.setPendingIntentTemplate(R.id.gd_widget_grid, toastPendingIntent);
+            remoteViews.setPendingIntentTemplate(R.id.gd_widget_grid, pendingIntent);
 
             // call into Android framework manager to refresh the widget
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
@@ -88,15 +83,11 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
+    // not used
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(Context context) {}
 
-        Log.e(LOG_TAG, "~~ onEnabled");
-
-    }
-
+    // not used
     @Override
-    public void onDisabled(Context context) {
-        Log.e(LOG_TAG, "~~ onDisabled");
-    }
+    public void onDisabled(Context context) {}
 }

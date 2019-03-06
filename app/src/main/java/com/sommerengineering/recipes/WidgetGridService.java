@@ -3,7 +3,9 @@ package com.sommerengineering.recipes;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -56,7 +58,20 @@ public class WidgetGridService extends RemoteViewsService {
             // extract Dessert objects from the JSON payload
             mDesserts = Utilities.extractDessertsFromJson(responseJson);
 
-            // TODO get dessert ID from shared preferences
+            // get the persistent shared preferences
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(mContext);
+
+            // get the widget dessert preference key string
+            String widgetDessertKey = getString(R.string.widget_dessert_key);
+            String widgetDessertDefaultValue = getString(R.string.widget_dessert_default_value);
+
+            // get the desired widget dessert from the shared preferences
+            String widgetDessertTitle =
+                    sharedPreferences.getString(widgetDessertKey, widgetDessertDefaultValue);
+
+            Log.e("~~ ", widgetDessertTitle);
+
             mDessert = mDesserts.get(0);
 
             // TODO setup title textviews

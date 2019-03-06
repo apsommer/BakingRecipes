@@ -16,5 +16,6 @@
     <string name="nutella_pie_title">Nutella Pie</string>
     <string name="widget_8_servings">&#160;8</string>
     <string name="widget_dessert_key">Widget Dessert</string>
+    <string name="widget_dessert_default_value">Nutella Pie</string>
 
 </resources>
