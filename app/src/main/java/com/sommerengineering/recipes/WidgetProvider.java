@@ -75,10 +75,8 @@ public class WidgetProvider extends AppWidgetProvider {
             String widgetServingsDefaultValue = context.getString(R.string.widget_servings_default_value);
 
             // get the desired widget dessert attributes from the shared preferences
-            String widgetName =
-                    sharedPreferences.getString(widgetNameKey, widgetNameDefaultValue);
-            String widgetServings =
-                    sharedPreferences.getString(widgetServingsKey, widgetServingsDefaultValue);
+            String widgetName = sharedPreferences.getString(widgetNameKey, widgetNameDefaultValue);
+            String widgetServings = sharedPreferences.getString(widgetServingsKey, widgetServingsDefaultValue);
 
             // set text in the widget title textviews
             remoteViews.setTextViewText(R.id.tv_widget_name, widgetName);

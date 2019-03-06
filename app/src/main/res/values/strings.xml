@@ -6,15 +6,17 @@
     <!-- empty states for recycler grid -->
     <string name="no_internet_connection">There is no internet connection.\n\nTry (1) turning off airplane mode, (2) turning on mobile data or WiFi, (3) checking the signal in your area &#8230; then restart the app to automatically refresh the results.</string>
 
+    <!-- simple labels -->
     <string name="step_image_description">step image</string>
     <string name="no_video_description">no video</string>
-    <string name="launcher_icon_description">launcer icon</string>
+    <string name="launcher_icon_description">launcher icon</string>
     <string name="servings_label">&#160;servings</string>
     <string name="ingredients_label">INGREDIENTS</string>
     <string name="steps_label">STEPS</string>
+
+    <!-- widget -->
     <string name="widget_loading_message">Loading ingredients &#8230;</string>
     <string name="nutella_pie_title">Nutella Pie</string>
-    <string name="widget_8_servings">&#160;8</string>
     <string name="widget_name_key">widget_name_key</string>
     <string name="widget_name_default_value">Nutella Pie</string>
     <string name="widget_servings_key">widget_servings_key</string>

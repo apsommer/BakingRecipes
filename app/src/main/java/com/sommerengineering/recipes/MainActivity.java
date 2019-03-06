@@ -152,11 +152,33 @@ public class MainActivity extends AppCompatActivity implements
         // delete existing contents of overflow menu
         invalidateOptionsMenu();
 
+        // get the persistent shared preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+        // get the widget dessert preference key and default value
+        String widgetNameKey = getString(R.string.widget_name_key);
+        String widgetNameDefaultValue = getString(R.string.widget_name_default_value);
+
+        // get the user selected widget dessert from the shared preferences
+        String widgetName = sharedPreferences.getString(widgetNameKey, widgetNameDefaultValue);
+
         // if the desserts list has finished loading, add the dessert names as menu items
         if (mDesserts != null && !mDesserts.isEmpty()) {
 
+            // loop through all desserts
+            String name;
             for (int i = 0; i < mDesserts.size(); i++) {
-                menu.add(mDesserts.get(i).getName());
+
+                // get the name of the current dessert
+                name = mDesserts.get(i).getName();
+
+                // add a menu item for this name and set its checkbox to unchecked
+                MenuItem menuItem = menu.add(name);
+                menuItem.setCheckable(true);
+
+                // if the dessert name is the same as the widget preference then check it
+                if (name.equals(widgetName)) menuItem.setChecked(true);
+
             }
         }
 
@@ -167,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements
     // items within the overflow menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        // check this item
+        item.setChecked(true);
 
         // get name of the selected dessert menu item
         String selectedName = String.valueOf(item.getTitle());
