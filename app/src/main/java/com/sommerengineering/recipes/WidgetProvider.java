@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -60,6 +62,26 @@ public class WidgetProvider extends AppWidgetProvider {
 
             // define an empty state for gridview
             remoteViews.setEmptyView(R.id.gd_widget_grid, R.id.rl_widget_grid_empty_view);
+
+            // get the persistent shared preferences
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(context);
+
+            // get the widget dessert preference keys and default values
+            String widgetNameKey = context.getString(R.string.widget_name_key);
+            String widgetNameDefaultValue = context.getString(R.string.widget_name_default_value);
+            String widgetServingsKey = context.getString(R.string.widget_servings_key);
+            String widgetServingsDefaultValue = context.getString(R.string.widget_servings_default_value);
+
+            // get the desired widget dessert attributes from the shared preferences
+            String widgetName =
+                    sharedPreferences.getString(widgetNameKey, widgetNameDefaultValue);
+            String widgetServings =
+                    sharedPreferences.getString(widgetServingsKey, widgetServingsDefaultValue);
+
+            // set text in the widget title textviews
+            remoteViews.setTextViewText(R.id.tv_widget_name, widgetName);
+            remoteViews.setTextViewText(R.id.tv_widget_servings, widgetServings);
 
             // base intent for the widget provider class is applied to every grid item
             Intent intentToStartWidgetProvider = new Intent(context, WidgetProvider.class);

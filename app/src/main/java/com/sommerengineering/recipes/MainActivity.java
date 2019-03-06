@@ -5,8 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements
     private Context mContext;
     private DessertsAdapter mAdapter;
     private ArrayList<Dessert> mDesserts;
+    private Dessert mDessert;
 
     // Butterknife view binding
     @BindView(R.id.rv_recycler) RecyclerView mRecycler;
@@ -157,10 +155,8 @@ public class MainActivity extends AppCompatActivity implements
         // if the desserts list has finished loading, add the dessert names as menu items
         if (mDesserts != null && !mDesserts.isEmpty()) {
 
-            Dessert dessert;
             for (int i = 0; i < mDesserts.size(); i++) {
-                dessert = mDesserts.get(i);
-                menu.add(dessert.getName());
+                menu.add(mDesserts.get(i).getName());
             }
         }
 
@@ -172,19 +168,32 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        // get title of the selected dessert item
-        String itemTitle = String.valueOf(item.getTitle());
+        // get name of the selected dessert menu item
+        String selectedName = String.valueOf(item.getTitle());
 
-        // get the widget dessert preference key string
-        String widgetDessertKey = getString(R.string.widget_dessert_key);
+        // find the dessert ID with same name as the preference
+        int dessertId = 0;
+        for (int i = 0; i < mDesserts.size(); i++) {
+            if (mDesserts.get(i).getName().equals(selectedName)) {
+                dessertId = i;
+            }
+        }
+
+        // set the member variable to this selected dessert
+        mDessert = mDesserts.get(dessertId);
+
+        // get the widget dessert preference key strings
+        String widgetNameKey = getString(R.string.widget_name_key);
+        String widgetServingsKey = getString(R.string.widget_servings_key);
 
         // create a shared preference editor
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // persistently store the preference for the widget dessert name
-        editor.putString(widgetDessertKey, itemTitle);
+        // persistently store the preference for the widget dessert name and servings
+        editor.putString(widgetNameKey, selectedName);
+        editor.putString(widgetServingsKey, String.valueOf(mDessert.getServings()));
         editor.apply();
 
         // create an intent to start the WidgetProvider class

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/widget_container"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -15,7 +16,7 @@
             android:typeface="serif"
             android:background="@null"
             android:textColor="@android:color/black"
-            android:text="@string/nutella_pie_title"
+            tools:text="@string/nutella_pie_title"
             android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/med_margin" />
 
@@ -37,7 +38,7 @@
                 android:textSize="@dimen/subtitle_text_size"
                 android:textColor="@color/gray"
                 android:background="@null"
-                android:text="@string/widget_8_servings" />
+                tools:text="8" />
 
             <TextView
                 android:id="@+id/tv_widget_servings_label"
@@ -66,7 +67,6 @@
         <RelativeLayout
             android:id="@+id/rl_widget_grid_empty_view"
             android:layout_width="match_parent"
-            android:layout_below="@id/rl_widget_subtitle_container"
             android:layout_height="match_parent"
             android:background="@null">
 

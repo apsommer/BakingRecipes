@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,7 +43,7 @@ public class WidgetGridService extends RemoteViewsService {
         }
 
         // refresh the desserts list
-        // NOTE: the synchronous network call is allowed and best practice
+        // NOTE: the synchronous network call is allowed and is best practice
         @Override
         public void onDataSetChanged() {
 
@@ -63,20 +61,25 @@ public class WidgetGridService extends RemoteViewsService {
                     PreferenceManager.getDefaultSharedPreferences(mContext);
 
             // get the widget dessert preference key string
-            String widgetDessertKey = getString(R.string.widget_dessert_key);
-            String widgetDessertDefaultValue = getString(R.string.widget_dessert_default_value);
+            String widgetNameKey = getString(R.string.widget_name_key);
+            String widgetNameDefaultValue = getString(R.string.widget_name_default_value);
 
             // get the desired widget dessert from the shared preferences
             String widgetDessertTitle =
-                    sharedPreferences.getString(widgetDessertKey, widgetDessertDefaultValue);
+                    sharedPreferences.getString(widgetNameKey, widgetNameDefaultValue);
 
-            Log.e("~~ ", widgetDessertTitle);
+            // find the dessert ID with same name as the preference
+            int dessertId = 0;
+            for (int i = 0; i < mDesserts.size(); i++) {
+                if (mDesserts.get(i).getName().equals(widgetDessertTitle)) {
+                    dessertId = i;
+                }
+            }
 
-            mDessert = mDesserts.get(0);
+            // set the member variable to this dessert
+            mDessert = mDesserts.get(dessertId);
 
-            // TODO setup title textviews
-
-            // get ingredients list
+            // set ingredients list to be used in getViewAt()
             mIngredients = mDessert.getIngredients();
         }
 

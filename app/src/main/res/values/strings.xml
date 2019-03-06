@@ -15,7 +15,9 @@
     <string name="widget_loading_message">Loading ingredients &#8230;</string>
     <string name="nutella_pie_title">Nutella Pie</string>
     <string name="widget_8_servings">&#160;8</string>
-    <string name="widget_dessert_key">Widget Dessert</string>
-    <string name="widget_dessert_default_value">Nutella Pie</string>
+    <string name="widget_name_key">widget_name_key</string>
+    <string name="widget_name_default_value">Nutella Pie</string>
+    <string name="widget_servings_key">widget_servings_key</string>
+    <string name="widget_servings_default_value">8</string>
 
 </resources>
