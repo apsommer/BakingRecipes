@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 public class WidgetProvider extends AppWidgetProvider {
@@ -82,6 +83,8 @@ public class WidgetProvider extends AppWidgetProvider {
             // set text in the widget title textviews
             remoteViews.setTextViewText(R.id.tv_widget_name, widgetName);
             remoteViews.setTextViewText(R.id.tv_widget_servings, widgetServings);
+            remoteViews.setViewVisibility(R.id.tv_widget_name, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.rl_widget_subtitle_container, View.VISIBLE);
 
             // base intent for the widget provider class is applied to every grid item
             Intent intentToStartWidgetProvider = new Intent(context, WidgetProvider.class);

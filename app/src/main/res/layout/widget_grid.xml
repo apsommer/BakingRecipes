@@ -17,6 +17,7 @@
             android:background="@null"
             android:textColor="@android:color/black"
             tools:text="@string/nutella_pie_title"
+            android:visibility="gone"
             android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/med_margin" />
 
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:visibility="gone"
             android:layout_marginBottom="@dimen/med_margin"
             android:layout_below="@id/tv_widget_name" >
 
@@ -68,6 +70,7 @@
             android:id="@+id/rl_widget_grid_empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/rl_widget_subtitle_container"
             android:background="@null">
 
             <ImageView
