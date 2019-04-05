@@ -1,59 +1,13 @@
-Overview
+This Android Baking App allows Udacity’s resident baker-in-chief, Miriam, to share her recipes with the world. A user selects a recipe and sees video-guided steps for how to complete it.
 
-This Android app views recipes and their steps in video format. Media loading classes, UI tests, and third party libraries are used, as well as a home screen widget.
+The recipe listing JSON file contains the recipes' instructions, ingredients, videos and images needed to complete this project. Not all steps of the recipe have a video. Some may have a video, an image, or no visual media at all.
 
-Project Overview
+One of the skills demonstrated in this project is how to handle unexpected input in the data -- professional developers cannot expect polished JSON data when building an app.
 
-    Take app from functional to production ready.
+Skills Demonstrated
 
-    Baking App
-
-        User selects a recipe and watches a video with guided steps for how to complete it.
-
-        JSON payload provided from Udacity servers.
-        https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json
-
-        Not all steps in the recipe have a video, or even a picture, and the app should handle these cases gracefully.
-
-Requirements
-
-    RecyclerView
-
-    Error cases
-
-    Accessibility
-
-        Master/Detail Flow pattern
-        Fragments to create a responsive design for both phones and tablets
-
-    Localization
-
-    UI Testing
-
-        Espresso to test aspects of the UI.
-
-    Widget
-
-        Displays ingredient list for a desired recipe.
-
-    Third party libraries
-
-        At least one third party library is used.
-        This can be a library to assist in the creation of a ContentProvider, a UI binding library, etc.
-
-        Picasso / Glide
-        Butterknife
-        Timber
-
-    Display videos
-
-        ExoPlayer with proper initialization and release.
-
-Submission
-
-    Extract all hardcoded strings and dimensions to appropriate directories.
-    Remove all API keys from public repository, add note in README. (No API keys for this project.)
-    Gradle > Clean project
-
-    Rubric
-    https://review.udacity.com/#!/rubrics/829/view
+• Use MediaPlayer/Exoplayer to display videos.
+• Handle error cases in Android.
+• Add a widget to your app experience.
+• Leverage a third-party library in your app.
+• Use Fragments to create a responsive design that works on phones and tablets.
