@@ -11,3 +11,7 @@ Skills Demonstrated
 - Add a widget to your app experience.
 - Leverage a third-party library in your app.
 - Use Fragments to create a responsive design that works on phones and tablets.
+
+![Image of phone, portrait orientation](https://github.com/apsommer/BakingRecipes/tree/master/github/phone_port.png)
+![Image of tablet, landscape orientation](https://github.com/apsommer/BakingRecipes/tree/master/github/tablet_land.png)
+![Image of tablet, landscape orientation, home screen widget](https://github.com/apsommer/BakingRecipes/tree/master/github/tablet_land_widget.png)
