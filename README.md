@@ -12,6 +12,11 @@ Skills Demonstrated
 - Leverage a third-party library in your app.
 - Use Fragments to create a responsive design that works on phones and tablets.
 
-![1](github/phone_port.png)
-![2](github/tablet_land.png)
-![3](github/tablet_land_widget.png)
+Introductory activity on phone in portrait orientation.
+![](github/phone_port.png)
+
+Recipe detail activity on a tablet in landscape orientation.
+![](github/tablet_land.png)
+
+Home screen widget on a tablet in landscape orientation.
+![](github/tablet_land_widget.png)
