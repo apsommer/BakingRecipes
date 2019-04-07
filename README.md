@@ -15,12 +15,12 @@ One of the skills demonstrated in this project is how to handle unexpected input
 - Use Fragments to create a responsive design that works on phones and tablets.
 
 #### Introduction on phone in portrait orientation.
-#### ![](github/phone_port.png)
+#### ![](demo/phone_port.png)
 
 #### Recipe details on a tablet in landscape orientation.
 
-#### ![](github/tablet_land.png)
+#### ![](demo/tablet_land.png)
 
 #### Home screen widget on a tablet in landscape orientation.
 
-#### ![](github/tablet_land_widget.png)
+#### ![](demo/tablet_land_widget.png)
