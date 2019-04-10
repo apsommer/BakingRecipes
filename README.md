@@ -1,26 +1,20 @@
-## Baking Recipes
+# Baking Recipes
 
-This Android Baking App allows Udacity’s resident baker-in-chief, Miriam, to share her recipes with the world. A user selects a recipe and sees video-guided steps for how to complete it.
-
-The recipe listing JSON file contains the recipes' instructions, ingredients, videos and images needed to complete this project. Not all steps of the recipe have a video. Some may have a video, an image, or no visual media at all.
-
-One of the skills demonstrated in this project is how to handle unexpected input in the data -- professional developers cannot expect polished JSON data when building an app.
+This is an Android app that shares baking recipes with the world, created as part of the [Android Developer Nanodegree by Google](https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801). A user selects a recipe and sees video-guided steps for how to complete it.
 
 ### Skills Demonstrated
 
-- Use MediaPlayer/Exoplayer to display videos.
-- Handle error cases in Android.
-- Add a widget to your app experience.
-- Leverage a third-party library in your app.
-- Use Fragments to create a responsive design that works on phones and tablets.
+- JSON parsing from an API endpoint.
+- Exoplayer to natively display mp4 videos.
+- Home screen widget with a remote grid.
+- Leverage of multiple third-party libraries.
+- Fragments to create a responsive UI on phones (single-panel) and tablets (two-panel).
 
-#### Introduction on phone in portrait orientation.
-#### ![](demo/phone_port.png)
+#### Introduction grid on 720 x 1280p (API 25) in portrait orientation.
+![](demo/phone_port.png)
 
-#### Recipe details on a tablet in landscape orientation.
+#### Two-pane UI details on 1920 x 1200p (API 22) in landscape orientation.
+![](demo/tablet_land.png)
 
-#### ![](demo/tablet_land.png)
-
-#### Home screen widget on a tablet in landscape orientation.
-
-#### ![](demo/tablet_land_widget.png)
+#### Home screen widget on 1920 x 1200p (API 22) in landscape orientation.
+![](demo/tablet_land_widget.png)
